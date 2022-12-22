@@ -4,8 +4,12 @@ import { Route, Switch } from "react-router-dom";
 
 import * as sessionActions from "./store/session";
 
+import ProtectedRoute from "./components/ProtectedRoute";
+
 import LoginFormPage from "./components/LoginFormPage";
 import SignupFormPage from "./components/SignupFormPage";
+import SplashPage from "./components/SplashPage";
+import HomePage from "./components/HomePage";
 
 function App() {
   const dispatch = useDispatch();
@@ -14,17 +18,26 @@ function App() {
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
   }, [dispatch]);
 
+  if (!isLoaded) {
+    return null;
+  }
   return (
-    isLoaded && (
+    <>
       <Switch>
+        <Route path="/" exact>
+          <SplashPage isLoaded={isLoaded} />
+        </Route>
         <Route path="/login">
           <LoginFormPage />
         </Route>
         <Route path="/signup">
           <SignupFormPage />
         </Route>
+        <ProtectedRoute path="/home">
+          <HomePage />
+        </ProtectedRoute>
       </Switch>
-    )
+    </>
   );
 }
 

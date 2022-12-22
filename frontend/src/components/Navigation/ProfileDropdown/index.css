@@ -1,0 +1,9 @@
+.profile-dropdown-menu-button {
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+
+.fa-bars {
+  font-size: 1.5rem;
+}
