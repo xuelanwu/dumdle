@@ -1,0 +1,13 @@
+.nav-items {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #ffc629;
+}
+
+.nav-items p {
+  font-size: 2rem;
+  font-weight: 550;
+  margin: 0;
+  padding-left: 0.5rem;
+}
