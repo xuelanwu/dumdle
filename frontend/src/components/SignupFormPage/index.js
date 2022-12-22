@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import * as sessionActions from "../../store/session";
 
+import NavLogo from "../NavLogo";
+
 import "./index.css";
 
 function SignupFormPage() {
@@ -34,42 +36,86 @@ function SignupFormPage() {
     ]);
   };
 
+  const handleApple = (e) => {
+    e.preventDefault();
+    setErrors([]);
+    return dispatch(
+      sessionActions.login({
+        credential: "user1@user.io",
+        password: "password1",
+      })
+    ).catch(async (res) => {
+      const data = await res.json();
+      if (data && data.errors) setErrors(data.errors);
+    });
+  };
+  const handleFacebook = (e) => {
+    e.preventDefault();
+    setErrors([]);
+    return dispatch(
+      sessionActions.login({
+        credential: "user2@user.io",
+        password: "password2",
+      })
+    ).catch(async (res) => {
+      const data = await res.json();
+      if (data && data.errors) setErrors(data.errors);
+    });
+  };
+
   return (
-    <form onSubmit={handleSubmit}>
-      <ul>
-        {errors.map((error, idx) => (
-          <li key={idx}>{error}</li>
-        ))}
-      </ul>
-      <label>
-        Email
-        <input
-          type="text"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-      </label>
-      <label>
-        Password
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </label>
-      <label>
-        Confirm Password
-        <input
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          required
-        />
-      </label>
-      <button type="submit">Sign Up</button>
-    </form>
+    <div className="auth-container">
+      <NavLogo />
+      <div className="auth-block">
+        <h2>Welcome! How do you want to get started?</h2>
+        <div className="user-button-container">
+          <button className="apple-button" onClick={handleApple}>
+            <i className="fa-brands fa-apple fa-xl"></i>
+            <span>Continue as Demo1</span>
+          </button>
+          <button className="facebook-button" onClick={handleFacebook}>
+            <i className="fa-brands fa-facebook fa-lg"></i>
+            <span>Continue as Demo2</span>
+          </button>
+        </div>
+        <div className="user-form-divider-block">
+          <div className="user-form-divider">
+            <div className="divider-line"></div>
+            <span>or</span>
+            <div className="divider-line"></div>
+          </div>
+        </div>
+        <form onSubmit={handleSubmit} className="user-form">
+          <ul>
+            {errors.length > 0 ? (
+              errors.map((error, idx) => <li key={idx}>{error}</li>)
+            ) : (
+              <p>Sign up with your email instead</p>
+            )}
+          </ul>
+          <input
+            type="text"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
+          />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter your password"
+          />
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            placeholder="Confirm your password"
+          />
+
+          <button type="submit">Log In</button>
+        </form>
+      </div>
+    </div>
   );
 }
 
