@@ -1,10 +1,13 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getProfile } from "../../store/profile";
+import ProfileMainContainer from "./ProfileMainContainer";
 
-import HomeSideBar from "./HomeSideBar";
+import ProfileSideBar from "./ProfileSideBar";
 
-const HomePage = () => {
+import "./index.css";
+
+const ProfileFormPage = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.session.user);
 
@@ -17,9 +20,10 @@ const HomePage = () => {
 
   if (!user) return null;
   return (
-    <>
-      <HomeSideBar />
-    </>
+    <div className="page-container profile">
+      <ProfileSideBar />
+      <ProfileMainContainer />
+    </div>
   );
 };
-export default HomePage;
+export default ProfileFormPage;

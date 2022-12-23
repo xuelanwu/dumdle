@@ -1,7 +1,7 @@
 const express = require("express");
 
 const { setTokenCookie, requireAuth } = require("../../utils/auth");
-const { User } = require("../../db/models");
+const { User, Dog } = require("../../db/models");
 
 const router = express.Router();
 
@@ -29,6 +29,24 @@ router.post("/", validateSignup, async (req, res) => {
   return res.json({
     user,
   });
+});
+
+router.get("/:userId/dog", requireAuth, async (req, res, next) => {
+  const { userId } = req.params;
+
+  const dog = await Dog.findOne({
+    where: { ownerId: userId },
+  });
+
+  if (!dog) {
+    const err = new Error("Not Found");
+    err.title = "Not Found";
+    err.errors = ["Not Found"];
+    err.status = 404;
+    return next(err);
+  }
+
+  return res.json(dog);
 });
 
 module.exports = router;
