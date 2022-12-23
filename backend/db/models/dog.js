@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Dog.belongsTo(models.User, { targetKey: "id" });
+      Dog.belongsTo(models.User, { foreignKey: "ownerId" });
     }
   }
   Dog.init(
@@ -26,28 +26,41 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.INTEGER,
         validate: {
-          min: {
-            args: 0,
-            msg: "Age is not valid",
-          },
           max: {
-            args: 20,
-            msg: "Age is not valid",
+            args: [20],
+            msg: "Max age is not valid",
+          },
+          min: {
+            args: [0],
+            msg: "Min age is not valid",
           },
         },
       },
-      gender: DataTypes.INTEGER,
+      gender: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        validate: {
+          min: {
+            args: 1,
+            msg: "Gender is not valid",
+          },
+          max: {
+            args: 3,
+            msg: "Gender is not valid",
+          },
+        },
+      },
       size: {
         allowNull: false,
         type: DataTypes.INTEGER,
         validate: {
           min: {
             args: 1,
-            msg: "Age is not valid",
+            msg: "Min size is not valid",
           },
           max: {
             args: 4,
-            msg: "Age is not valid",
+            msg: "Max size is not valid",
           },
         },
       },
@@ -67,24 +80,24 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-      fixed: { type: DataTypes.BOOLEAN, allowNull: false },
-      houseTrained: { type: DataTypes.BOOLEAN, allowNull: false },
-      energyLevel: {
-        allowNull: false,
-        type: DataTypes.INTEGER,
-        validate: {
-          min: {
-            args: 1,
-            msg: "EnergyLevel is not valid",
-          },
-          max: {
-            args: 3,
-            msg: "EnergyLevel is not valid",
-          },
-        },
-      },
-      goodWithCats: { type: DataTypes.BOOLEAN, allowNull: false },
-      goodWithKids: { type: DataTypes.BOOLEAN, allowNull: false },
+      // fixed: { type: DataTypes.BOOLEAN, allowNull: false },
+      // houseTrained: { type: DataTypes.BOOLEAN, allowNull: false },
+      // energyLevel: {
+      //   allowNull: false,
+      //   type: DataTypes.INTEGER,
+      //   validate: {
+      //     min: {
+      //       args: 1,
+      //       msg: "EnergyLevel is not valid",
+      //     },
+      //     max: {
+      //       args: 3,
+      //       msg: "EnergyLevel is not valid",
+      //     },
+      //   },
+      // },
+      // goodWithCats: { type: DataTypes.BOOLEAN, allowNull: false },
+      // goodWithKids: { type: DataTypes.BOOLEAN, allowNull: false },
     },
     {
       sequelize,

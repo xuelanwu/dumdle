@@ -1,0 +1,5 @@
+.sidebar-content-container {
+  width: 25vw;
+  height: calc(100vh - 4.5rem);
+  box-shadow: 1px 0 0 0 #dcdcdc;
+}

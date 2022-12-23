@@ -12,6 +12,7 @@ module.exports = {
       ownerId: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        unique: true,
         references: { model: "Users", key: "id" },
         onDelete: "CASCADE",
       },
@@ -39,26 +40,26 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false,
       },
-      fixed: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-      },
-      houseTrained: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-      },
-      energyLevel: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      goodWithCats: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-      },
-      goodWithKids: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-      },
+      // fixed: {
+      //   type: Sequelize.BOOLEAN,
+      //   allowNull: false,
+      // },
+      // houseTrained: {
+      //   type: Sequelize.BOOLEAN,
+      //   allowNull: false,
+      // },
+      // energyLevel: {
+      //   type: Sequelize.INTEGER,
+      //   allowNull: false,
+      // },
+      // goodWithCats: {
+      //   type: Sequelize.BOOLEAN,
+      //   allowNull: false,
+      // },
+      // goodWithKids: {
+      //   type: Sequelize.BOOLEAN,
+      //   allowNull: false,
+      // },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
