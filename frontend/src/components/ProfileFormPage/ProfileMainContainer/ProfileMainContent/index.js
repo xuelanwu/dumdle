@@ -6,6 +6,7 @@ import {
   deleteProfile,
   editProfile,
 } from "../../../../store/profile";
+import ProfileImageContaienr from "../ProfileImageContainer";
 
 import { AGE, SIZE } from "./constants";
 
@@ -100,6 +101,7 @@ const ProfileMainContent = () => {
   return (
     <div className="main-content-container profile">
       <form className="profile-form" onSubmit={handleSubmit}>
+        <ProfileImageContaienr />
         <div className="profile-form-block">
           <label className="profile-label" htmlFor="name">
             <span>Name</span>

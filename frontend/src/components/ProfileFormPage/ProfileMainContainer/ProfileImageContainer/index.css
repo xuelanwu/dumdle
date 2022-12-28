@@ -1,0 +1,44 @@
+.profile-image-container {
+  /* border: 1px solid red; */
+  height: calc(46vw - 4rem);
+}
+
+.profile-upload {
+  display: none;
+}
+
+.upload-image-label {
+  width: 100%;
+}
+
+.upload-image-grid-container {
+  width: 100%;
+  border: 1px solid green;
+  display: grid;
+  grid-template-columns: repeat(3, calc((46vw - 4rem) / 3));
+  grid-template-rows: repeat(2, calc((46vw - 4rem) / 3));
+  grid-template-areas:
+    "left left right-top"
+    "left left right-bottom";
+}
+
+.upload-image-grid-left {
+  border: 2px solid purple;
+  grid-area: left;
+}
+
+.upload-image-grid-right-top {
+  border: 2px solid aqua;
+  grid-area: right-top;
+}
+.upload-image-grid-right-bottom {
+  border: 2px solid darkred;
+  grid-area: right-bottom;
+}
+
+.upload-image-grid-item {
+  place-self: stretch stretch;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
