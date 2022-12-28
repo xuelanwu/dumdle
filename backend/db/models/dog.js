@@ -38,29 +38,21 @@ module.exports = (sequelize, DataTypes) => {
       },
       gender: {
         allowNull: false,
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         validate: {
-          min: {
-            args: 1,
-            msg: "Gender is not valid",
-          },
-          max: {
-            args: 3,
-            msg: "Gender is not valid",
+          isIn: {
+            args: [["female", "male", "other"]],
+            msg: "Must be Female, Male or Other",
           },
         },
       },
       size: {
         allowNull: false,
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         validate: {
-          min: {
-            args: 1,
-            msg: "Min size is not valid",
-          },
-          max: {
-            args: 4,
-            msg: "Max size is not valid",
+          isIn: {
+            args: [["small", "medium", "large", "giant"]],
+            msg: "Must be Small, Medium, Large or Giant",
           },
         },
       },

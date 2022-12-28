@@ -1,77 +1,307 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import {
+  createProfile,
+  deleteProfile,
+  editProfile,
+} from "../../../../store/profile";
+
+import { AGE, SIZE } from "./constants";
+
 import "./index.css";
 
 const ProfileMainContent = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const user = useSelector((state) => state.session.user);
+  const dog = useSelector((state) => state.session.profile);
+
   const [name, setName] = useState("");
-  const [age, setAge] = useState(null);
-  const [gender, setGender] = useState(null);
-  const [size, setSize] = useState(null);
+  const [age, setAge] = useState(0);
+  const [gender, setGender] = useState("");
+  const [size, setSize] = useState("");
   const [breed, setBreed] = useState("");
   const [description, setDescription] = useState("");
 
-  const handleSubmit = () => console.log("***************** profile submit");
+  const [errors, setErrors] = useState([]);
+
+  const [showAgeMenu, setShowAgeMenu] = useState(false);
+  const [showSizeMenu, setShowSizeMenu] = useState(false);
+
+  useEffect(() => {
+    if (dog) {
+      console.log("************* dog", dog);
+      const { name, age, gender, size, breed, description } = dog;
+      setName(name);
+      setAge(age);
+      setGender(gender);
+      setSize(size);
+      setBreed(breed);
+      setDescription(description);
+    }
+  }, [dog]);
+
+  const openAgeMenu = (e) => {
+    e.preventDefault();
+    if (showAgeMenu) return;
+    setShowAgeMenu(true);
+  };
+
+  useEffect(() => {
+    if (!showAgeMenu) return;
+    const closeMenu = () => {
+      setShowAgeMenu(false);
+    };
+    document.addEventListener("click", closeMenu);
+    return () => document.removeEventListener("click", closeMenu);
+  }, [showAgeMenu]);
+
+  const openSizeMenu = (e) => {
+    e.preventDefault();
+    if (showSizeMenu) return;
+    setShowSizeMenu(true);
+  };
+
+  useEffect(() => {
+    if (!showSizeMenu) return;
+    const closeMenu = () => {
+      setShowSizeMenu(false);
+    };
+    document.addEventListener("click", closeMenu);
+    return () => document.removeEventListener("click", closeMenu);
+  }, [showSizeMenu]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const dogInfo = { name, age, gender, size, breed, description };
+    // console.log("***************** dogINFO", dogInfo);
+    return dispatch(
+      dog && user.id === dog.ownerId
+        ? editProfile(dog.id, dogInfo)
+        : createProfile(user.id, dogInfo)
+    )
+      .then(() => history.push("/"))
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) setErrors(data.errors);
+      });
+  };
+  const handleDelete = (e) => {
+    e.preventDefault();
+    return dispatch(
+      dog && user.id === dog.ownerId && dispatch(deleteProfile(dog.id))
+    ).catch(async (res) => {
+      const data = await res.json();
+      if (data && data.errors) setErrors(data.errors);
+    });
+  };
 
   return (
     <div className="main-content-container profile">
       <form className="profile-form" onSubmit={handleSubmit}>
-        <input
-          className="profile-input"
-          placeholder="Dog Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        ></input>
-
-        <div className="checkbox-block">
-          <input
-            className="checkbox-gender"
-            type="radio"
-            name="gender"
-            id="female"
-            value="female"
-          ></input>
-          <label className="label-gender" for="female">
-            <span>Female</span>
+        <div className="profile-form-block">
+          <label className="profile-label" htmlFor="name">
+            <span>Name</span>
           </label>
+          <input
+            id="name"
+            className="profile-input profile-text-input"
+            placeholder="Dog Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          ></input>
         </div>
 
-        <div className="checkbox-block">
-          <input
-            className="checkbox-gender"
-            type="radio"
-            name="gender"
-            id="male"
-            value="male"
-          ></input>
-          <label className="label-gender" for="male">
-            <span>Male</span>
+        <div className="profile-form-block dropdown">
+          <label className="profile-label">
+            <span>Age</span>
           </label>
+          <div className="profile-dropdown">
+            <button
+              className="profile-input select-button"
+              onClick={openAgeMenu}
+            >
+              {console.log("************* age", age)}
+              {age === 0
+                ? "Less than 1 year"
+                : age === 1
+                ? "1 year"
+                : age < 20
+                ? `${age} years`
+                : "20+ years"}
+            </button>
+            {showAgeMenu && (
+              <div className="profile-dropdown-menu">
+                <div className="profile-dropdown-menu-inner">
+                  {AGE.map((ele) => (
+                    <button
+                      key={ele}
+                      value={ele}
+                      onClick={() => setAge(ele)}
+                      className={`highlight-${ele.toString() === age}`}
+                    >
+                      {ele === 0
+                        ? "Less than 1 year"
+                        : ele === 1
+                        ? "1 year"
+                        : ele < 20
+                        ? `${ele} years`
+                        : "20+ years"}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
-        <div className="checkbox-block">
-          <input
-            className="checkbox-gender"
-            type="radio"
-            name="gender"
-            id="other"
-            value="other"
-          ></input>
-          <label className="label-genderr" for="gender-other">
-            <span>Other</span>
+        <div className="profile-form-block">
+          <label className="profile-label">
+            <span>Gender</span>
           </label>
+          <div className="checkbox-container gender">
+            <div className="checkbox-block profile-input">
+              <input
+                className="profile-checkbox gender"
+                type="radio"
+                name="gender"
+                id="female"
+                value="female"
+                checked={gender === "female"}
+                onChange={(e) => {
+                  setGender(e.target.value);
+                }}
+              ></input>
+              <span className="checkmark">
+                <i className="fa-solid fa-check"></i>
+              </span>
+              <label className="profile-label gender" htmlFor="female">
+                <span>Female</span>
+              </label>
+            </div>
+
+            <div className="checkbox-block profile-input">
+              <input
+                className="profile-checkbox gender"
+                type="radio"
+                name="gender"
+                id="male"
+                value="male"
+                checked={gender === "male"}
+                onChange={(e) => setGender(e.target.value)}
+              ></input>
+              <span className="checkmark">
+                <i className="fa-solid fa-check"></i>
+              </span>
+              <label className="profile-label gender" htmlFor="male">
+                <span>Male</span>
+              </label>
+            </div>
+
+            <div className="checkbox-block profile-input">
+              <input
+                className="profile-checkbox gender"
+                type="radio"
+                name="gender"
+                id="other"
+                value="other"
+                checked={gender === "other"}
+                onChange={(e) => setGender(e.target.value)}
+              ></input>
+              <span className="checkmark">
+                <i className="fa-solid fa-check"></i>
+              </span>
+              <label className="profile-label gender" htmlFor="other">
+                <span>Other</span>
+              </label>
+            </div>
+          </div>
         </div>
 
-        <input
-          className="profile-input"
-          placeholder="Breed"
-          value={breed}
-          onChange={(e) => setBreed(e.target.value)}
-        ></input>
-        <textarea
-          className="profile-input"
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        ></textarea>
+        <div className="profile-form-block">
+          <label className="profile-label" htmlFor="breed">
+            <span>Breed</span>
+          </label>
+          <input
+            className="profile-input profile-text-input"
+            placeholder="Breed"
+            value={breed}
+            onChange={(e) => setBreed(e.target.value)}
+          ></input>
+        </div>
+
+        <div className="profile-form-block dropdown">
+          <label className="profile-label">
+            <span>Size</span>
+          </label>
+          <div className="profile-dropdown">
+            <button
+              className="profile-input select-button"
+              onClick={openSizeMenu}
+            >
+              {size === "small"
+                ? "Small (0-25 lbs)"
+                : size === "medium"
+                ? "Medium (26-60 lbs)"
+                : size === "large"
+                ? "Large (61-100 lbs)"
+                : size === "giant"
+                ? "Giant (101 lbs or more)"
+                : ""}
+            </button>
+            {showSizeMenu && (
+              <div className="profile-dropdown-menu">
+                <div className="profile-dropdown-menu-inner">
+                  {SIZE.map((ele) => (
+                    <button
+                      key={ele}
+                      value={ele}
+                      onClick={(e) => setSize(e.target.value)}
+                      className={`highlight-${ele.toString() === size}`}
+                    >
+                      {ele === "small"
+                        ? "Small (0-25 lbs)"
+                        : ele === "medium"
+                        ? "Medium (26-60 lbs)"
+                        : ele === "large"
+                        ? "Large (61-100 lbs)"
+                        : ele === "giant"
+                        ? "Giant (101 lbs or more)"
+                        : ""}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="profile-form-block">
+          <label className="profile-label">
+            <span>About Me</span>
+          </label>
+          <textarea
+            className="profile-textarea"
+            placeholder="Description"
+            value={description}
+            rows={4}
+            onChange={(e) => setDescription(e.target.value)}
+          ></textarea>
+        </div>
+
+        {dog && (
+          <div className="profile-form-block profile-input profile-delete-block">
+            <button className="profile-delete-button" onClick={handleDelete}>
+              Delete
+            </button>
+          </div>
+        )}
+        <div className="profile-form-block profile-input profile-submit-block">
+          <button type="submit" className="profile-submit-button">
+            Save
+          </button>
+        </div>
       </form>
     </div>
   );
