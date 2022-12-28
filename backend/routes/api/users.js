@@ -38,15 +38,50 @@ router.get("/:userId/dog", requireAuth, async (req, res, next) => {
     where: { ownerId: userId },
   });
 
-  if (!dog) {
-    const err = new Error("Not Found");
-    err.title = "Not Found";
-    err.errors = ["Not Found"];
-    err.status = 404;
+  if (dog) {
+    return res.json(dog);
+  } else return res.json(null);
+});
+
+router.post("/:userId/dog", requireAuth, async (req, res, next) => {
+  const { userId } = req.params;
+  const {
+    name,
+    age,
+    gender,
+    size,
+    breed,
+    description,
+    // fixed,
+    // houseTrained,
+    // energyLevel,
+    // goodWithCats,
+    // goodWithKids,
+  } = req.body;
+
+  if (parseInt(userId) === req.user.id) {
+    const dog = await Dog.create({
+      ownerId: parseInt(userId),
+      name,
+      age,
+      gender,
+      size,
+      breed,
+      description,
+      // fixed,
+      // houseTrained,
+      // energyLevel,
+      // goodWithCats,
+      // goodWithKids,
+    });
+    return res.json(dog);
+  } else {
+    const err = new Error("Unauthorized");
+    err.title = "Unauthorized";
+    err.errors = ["Forbidden"];
+    err.status = 403;
     return next(err);
   }
-
-  return res.json(dog);
 });
 
 module.exports = router;
