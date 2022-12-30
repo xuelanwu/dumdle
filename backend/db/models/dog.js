@@ -10,6 +10,11 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Dog.belongsTo(models.User, { foreignKey: "ownerId" });
+      Dog.hasMany(models.DogImage, {
+        foreignKey: "dogId",
+        onDelete: "CASCADE",
+        hooks: true,
+      });
     }
   }
   Dog.init(

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getProfile } from "../../store/profile";
+import { getProfile } from "../../store/session";
 
 import HomeSideBar from "./HomeSideBar";
 
