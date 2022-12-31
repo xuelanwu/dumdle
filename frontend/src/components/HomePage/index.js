@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getProfile } from "../../store/profile";
+import { getProfile } from "../../store/session";
 
 import HomeSideBar from "./HomeSideBar";
+import HomeMainContainer from "./HomeMainContainer";
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -17,9 +18,10 @@ const HomePage = () => {
 
   if (!user) return null;
   return (
-    <>
+    <div className="page-container home">
       <HomeSideBar />
-    </>
+      <HomeMainContainer />
+    </div>
   );
 };
 export default HomePage;
