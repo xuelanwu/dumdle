@@ -6,8 +6,9 @@ import { BrowserRouter } from "react-router-dom";
 import configureStore from "./store";
 import { restoreCSRF, csrfFetch } from "./store/csrf";
 
+import ModalProvider from "./context/Modal";
+
 import * as sessionActions from "./store/session";
-import * as profileActions from "./store/profile";
 
 import App from "./App";
 
@@ -21,15 +22,16 @@ if (process.env.NODE_ENV !== "production") {
   window.csrfFetch = csrfFetch;
   window.store = store;
   window.sessionActions = sessionActions;
-  window.profileActions = profileActions;
 }
 
 function Root() {
   return (
     <Provider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <ModalProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ModalProvider>
     </Provider>
   );
 }

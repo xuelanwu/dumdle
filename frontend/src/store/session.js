@@ -3,6 +3,9 @@ import { csrfFetch } from "./csrf";
 const SET_USER = "session/setUser";
 const REMOVE_USER = "session/removeUser";
 
+const SET_PROFILE = "session/setProfile";
+const REMOVE_PROFILE = "session/removeProfile";
+
 const setUser = (user) => {
   return {
     type: SET_USER,
@@ -13,6 +16,19 @@ const setUser = (user) => {
 const removeUser = () => {
   return {
     type: REMOVE_USER,
+  };
+};
+
+const setProfile = (profile) => {
+  return {
+    type: SET_PROFILE,
+    profile,
+  };
+};
+
+const removeProfile = () => {
+  return {
+    type: REMOVE_PROFILE,
   };
 };
 
@@ -59,7 +75,55 @@ export const logout = () => async (dispatch) => {
   return response;
 };
 
-const initialState = { user: null };
+export const getProfile = (userId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/users/${userId}/dog`);
+  if (response.ok) {
+    const data = await response.json();
+    dispatch(setProfile(data));
+    return data;
+  }
+  return response;
+};
+
+export const createProfile = (userId, dogInfo) => async (dispatch) => {
+  const response = await csrfFetch(`/api/users/${userId}/dog`, {
+    method: "POST",
+    body: JSON.stringify(dogInfo),
+  });
+  console.log("************* response", response);
+  if (response.ok) {
+    const data = await response.json();
+    dispatch(setProfile(data));
+    console.log("************* data", data);
+    return data;
+  }
+  return response;
+};
+
+export const editProfile = (dogId, dogInfo) => async (dispatch) => {
+  const response = await csrfFetch(`/api/dogs/${dogId}`, {
+    method: "PUT",
+    body: JSON.stringify(dogInfo),
+  });
+  console.log("************* response", response);
+  if (response.ok) {
+    const data = await response.json();
+    dispatch(setProfile(data));
+    console.log("************* data", data);
+    return data;
+  }
+  return response;
+};
+
+export const deleteProfile = (dogId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/dogs/${dogId}`, {
+    method: "DELETE",
+  });
+  dispatch(removeProfile());
+  return response;
+};
+
+const initialState = { user: null, profile: null };
 
 const sessionReducer = (state = initialState, action) => {
   let newState;
@@ -71,6 +135,15 @@ const sessionReducer = (state = initialState, action) => {
     case REMOVE_USER:
       newState = Object.assign({}, state);
       newState.user = null;
+      return newState;
+    case SET_PROFILE:
+      newState = Object.assign({}, state);
+      newState.profile = action.profile;
+      return newState;
+    case REMOVE_PROFILE:
+      newState = Object.assign({}, state);
+      newState.profile = null;
+      console.log("**************** newState", newState);
       return newState;
     default:
       return state;

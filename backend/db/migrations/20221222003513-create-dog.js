@@ -25,11 +25,11 @@ module.exports = {
         allowNull: false,
       },
       gender: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
       },
       size: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
       },
       breed: {
