@@ -92,7 +92,7 @@ router.put("/", requireAuth, async (req, res, next) => {
 router.delete("/", requireAuth, async (req, res, next) => {
   const userId = req.user.id;
   const { dogId } = req.body;
-
+  console.log("***************** dogId", dogId);
   const dog = await Dog.findByPk(dogId);
 
   if (!dog) {

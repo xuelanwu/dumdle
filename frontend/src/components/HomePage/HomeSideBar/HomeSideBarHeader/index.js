@@ -1,10 +1,19 @@
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+
 import "./index.css";
 
 const HomeSideBarHeader = () => {
   const dog = useSelector((state) => state.session.profile);
+
+  const history = useHistory();
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    history.push("/profile");
+  };
   return (
-    <div className="sidebar-header-container">
+    <div className="sidebar-header-container home" onClick={handleClick}>
       <div className="sidebar-avatar-block">
         {dog ? (
           <img src={dog.DogImages[0].url} alt="avatar-blue"></img>

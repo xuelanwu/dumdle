@@ -40,6 +40,13 @@ const ProfileMainContent = () => {
       setSize(size);
       setBreed(breed);
       setDescription(description);
+    } else {
+      setName("");
+      setAge(0);
+      setGender("");
+      setSize("");
+      setBreed("");
+      setDescription("");
     }
   }, [dog]);
 
@@ -91,7 +98,9 @@ const ProfileMainContent = () => {
   const handleDelete = (e) => {
     e.preventDefault();
     return dispatch(
-      dog && user.id === dog.ownerId && dispatch(deleteProfile(dog.id))
+      dog &&
+        user.id === dog.ownerId &&
+        dispatch(deleteProfile({ dogId: dog.id }))
     ).catch(async (res) => {
       const data = await res.json();
       if (data && data.errors) setErrors(data.errors);

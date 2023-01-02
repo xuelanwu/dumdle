@@ -1,10 +1,13 @@
+import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import "./index.css";
 
 const ProfileMainHeader = () => {
   const history = useHistory();
+  const dog = useSelector((state) => state.session.profile);
   const handleClose = () => {
-    history.push("/home");
+    if (dog) history.push("/home");
+    else history.push("/");
   };
   return (
     <div className="main-title-container profile">
