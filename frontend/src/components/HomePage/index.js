@@ -1,22 +1,15 @@
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getProfile } from "../../store/session";
+import { Redirect } from "react-router-dom";
 
 import HomeSideBar from "./HomeSideBar";
 import HomeMainContainer from "./HomeMainContainer";
 
 const HomePage = () => {
-  const dispatch = useDispatch();
   const user = useSelector((state) => state.session.user);
-
-  useEffect(() => {
-    dispatch(getProfile(user.id)).catch(async (res) => {
-      const data = await res.json();
-      console.log(data);
-    });
-  }, [user]);
+  const dog = useSelector((state) => state.session.profile);
 
   if (!user) return null;
+  if (!dog) return <Redirect to="/profile" />;
   return (
     <div className="page-container home">
       <HomeSideBar />

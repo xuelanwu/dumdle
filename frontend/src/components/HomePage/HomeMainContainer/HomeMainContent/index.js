@@ -21,8 +21,7 @@ const HomeMainContent = () => {
 
   const handleOnWheel = (e) => {
     const scroll = e.deltaY;
-    console.log("****************** wheel", scroll);
-    console.log("****************** wheel done", scrollDone);
+
     if (scrolling) {
       setScrollDone(false);
       if (page === 1) {
@@ -62,7 +61,6 @@ const HomeMainContent = () => {
         className="home-content-container"
         onWheelCapture={handleOnWheelCapture}
         onWheel={handleOnWheel}
-        onTr
       >
         <div className="home-content-block">
           <div className="home-content-card">

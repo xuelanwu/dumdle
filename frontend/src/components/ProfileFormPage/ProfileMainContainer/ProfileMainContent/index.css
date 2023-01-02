@@ -134,12 +134,25 @@
   border: 1px solid transparent;
 }
 
+.select-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .profile-dropdown-menu button:hover {
   background-color: rgb(176, 176, 176, 0.2);
 }
 
-.profile-dropdown-menu-inner .highlight-true {
+.profile-dropdown-menu-inner .option-highlight {
   color: #ffc629;
+}
+
+.select-button.default {
+  color: #757575;
+}
+.select-button.default {
+  color: #757575;
 }
 
 .profile-textarea {

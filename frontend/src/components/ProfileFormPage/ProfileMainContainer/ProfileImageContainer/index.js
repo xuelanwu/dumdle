@@ -23,7 +23,6 @@ const ProfileImageContaienr = ({ user }) => {
       const imgArr = [...imagesArr, img];
       setImagesArr(imgArr);
     }
-    console.log(imagesArr);
   };
 
   // useEffect(() => {
@@ -55,7 +54,6 @@ const ProfileImageContaienr = ({ user }) => {
         <div className="upload-image-grid-container">
           {[...Array(3).keys()].map((n) => (
             <div className="profile-img-grid-item">
-              {console.log("******** n", n)}
               {imagesArr.length > n ? (
                 <img
                   className="profile-img"

@@ -19,7 +19,7 @@ const ProfileMainContent = () => {
   const dog = useSelector((state) => state.session.profile);
 
   const [name, setName] = useState("");
-  const [age, setAge] = useState(0);
+  const [age, setAge] = useState("age");
   const [gender, setGender] = useState("");
   const [size, setSize] = useState("");
   const [breed, setBreed] = useState("");
@@ -42,7 +42,7 @@ const ProfileMainContent = () => {
       setDescription(description);
     } else {
       setName("");
-      setAge(0);
+      setAge("");
       setGender("");
       setSize("");
       setBreed("");
@@ -53,12 +53,16 @@ const ProfileMainContent = () => {
   const openAgeMenu = (e) => {
     e.preventDefault();
     if (showAgeMenu) return;
+    const block = document.querySelector(".select-button.age");
+    block.style.border = "1px solid #ffc629";
     setShowAgeMenu(true);
   };
 
   useEffect(() => {
     if (!showAgeMenu) return;
     const closeMenu = () => {
+      const block = document.querySelector(".select-button.age");
+      block.style.border = "1px solid #dcdcdc";
       setShowAgeMenu(false);
     };
     document.addEventListener("click", closeMenu);
@@ -67,13 +71,18 @@ const ProfileMainContent = () => {
 
   const openSizeMenu = (e) => {
     e.preventDefault();
+    console.log(e.target.innerText);
     if (showSizeMenu) return;
+    const block = document.querySelector(".select-button.size");
+    block.style.border = "1px solid #ffc629";
     setShowSizeMenu(true);
   };
 
   useEffect(() => {
     if (!showSizeMenu) return;
     const closeMenu = () => {
+      const block = document.querySelector(".select-button.size");
+      block.style.border = "1px solid #dcdcdc";
       setShowSizeMenu(false);
     };
     document.addEventListener("click", closeMenu);
@@ -129,19 +138,35 @@ const ProfileMainContent = () => {
             <span>Age</span>
           </label>
           <div className="profile-dropdown">
-            <button
-              className="profile-input select-button"
-              onClick={openAgeMenu}
-            >
-              {console.log("************* age", age)}
-              {age === 0
-                ? "Less than 1 year"
-                : age === 1
-                ? "1 year"
-                : age < 20
-                ? `${age} years`
-                : "20+ years"}
-            </button>
+            {age === "" ? (
+              <button
+                className="profile-input select-button age default"
+                onClick={openAgeMenu}
+              >
+                Age
+                <span>
+                  <i className="fa-solid fa-chevron-down"></i>
+                </span>
+              </button>
+            ) : (
+              <button
+                className="profile-input select-button age"
+                onClick={openAgeMenu}
+              >
+                {age === 0
+                  ? "Less than 1 year"
+                  : age === 1
+                  ? "1 year"
+                  : age < 20
+                  ? `${age} years`
+                  : "20+ years"}
+                {
+                  <span>
+                    <i className="fa-solid fa-chevron-down"></i>
+                  </span>
+                }
+              </button>
+            )}
             {showAgeMenu && (
               <div className="profile-dropdown-menu">
                 <div className="profile-dropdown-menu-inner">
@@ -150,7 +175,9 @@ const ProfileMainContent = () => {
                       key={ele}
                       value={ele}
                       onClick={() => setAge(ele)}
-                      className={`highlight-${ele.toString() === age}`}
+                      className={`${
+                        ele === age ? "option-highlight" : "option"
+                      }`}
                     >
                       {ele === 0
                         ? "Less than 1 year"
@@ -247,20 +274,37 @@ const ProfileMainContent = () => {
             <span>Size</span>
           </label>
           <div className="profile-dropdown">
-            <button
-              className="profile-input select-button"
-              onClick={openSizeMenu}
-            >
-              {size === "small"
-                ? "Small (0-25 lbs)"
-                : size === "medium"
-                ? "Medium (26-60 lbs)"
-                : size === "large"
-                ? "Large (61-100 lbs)"
-                : size === "giant"
-                ? "Giant (101 lbs or more)"
-                : ""}
-            </button>
+            {size === "" ? (
+              <button
+                className="profile-input select-button size default"
+                onClick={openSizeMenu}
+              >
+                Size
+                <span>
+                  <i className="fa-solid fa-chevron-down"></i>
+                </span>
+              </button>
+            ) : (
+              <button
+                className="profile-input select-button size"
+                onClick={openSizeMenu}
+              >
+                {size === "small"
+                  ? "Small (0-25 lbs)"
+                  : size === "medium"
+                  ? "Medium (26-60 lbs)"
+                  : size === "large"
+                  ? "Large (61-100 lbs)"
+                  : size === "giant"
+                  ? "Giant (101 lbs or more)"
+                  : ""}
+                {
+                  <span>
+                    <i className="fa-solid fa-chevron-down"></i>
+                  </span>
+                }
+              </button>
+            )}
             {showSizeMenu && (
               <div className="profile-dropdown-menu">
                 <div className="profile-dropdown-menu-inner">
@@ -269,7 +313,9 @@ const ProfileMainContent = () => {
                       key={ele}
                       value={ele}
                       onClick={(e) => setSize(e.target.value)}
-                      className={`highlight-${ele.toString() === size}`}
+                      className={`${
+                        ele === size ? "option-highlight" : "option"
+                      }`}
                     >
                       {ele === "small"
                         ? "Small (0-25 lbs)"
