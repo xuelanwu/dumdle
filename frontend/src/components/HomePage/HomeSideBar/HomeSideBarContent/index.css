@@ -8,6 +8,11 @@
   align-items: center;
 }
 
+.sidebar-content-container.home {
+  align-items: flex-start;
+  padding-top: 0;
+}
+
 .sidebar-content-container p {
   font-size: 1rem;
   font-weight: 600;

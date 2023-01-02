@@ -5,7 +5,8 @@ import {
   createProfile,
   deleteProfile,
   editProfile,
-} from "../../../../store/profile";
+} from "../../../../store/session";
+import ProfileImageContaienr from "../ProfileImageContainer";
 
 import { AGE, SIZE } from "./constants";
 
@@ -78,8 +79,8 @@ const ProfileMainContent = () => {
     // console.log("***************** dogINFO", dogInfo);
     return dispatch(
       dog && user.id === dog.ownerId
-        ? editProfile(dog.id, dogInfo)
-        : createProfile(user.id, dogInfo)
+        ? editProfile({ ...dogInfo, dogId: dog.id })
+        : createProfile(dogInfo)
     )
       .then(() => history.push("/"))
       .catch(async (res) => {
@@ -100,6 +101,7 @@ const ProfileMainContent = () => {
   return (
     <div className="main-content-container profile">
       <form className="profile-form" onSubmit={handleSubmit}>
+        <ProfileImageContaienr user={user} />
         <div className="profile-form-block">
           <label className="profile-label" htmlFor="name">
             <span>Name</span>

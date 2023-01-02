@@ -76,7 +76,7 @@ export const logout = () => async (dispatch) => {
 };
 
 export const getProfile = (userId) => async (dispatch) => {
-  const response = await csrfFetch(`/api/users/${userId}/dog`);
+  const response = await csrfFetch(`/api/dogs?userId=${userId}`);
   if (response.ok) {
     const data = await response.json();
     dispatch(setProfile(data));
@@ -85,8 +85,8 @@ export const getProfile = (userId) => async (dispatch) => {
   return response;
 };
 
-export const createProfile = (userId, dogInfo) => async (dispatch) => {
-  const response = await csrfFetch(`/api/users/${userId}/dog`, {
+export const createProfile = (dogInfo) => async (dispatch) => {
+  const response = await csrfFetch(`/api/dogs`, {
     method: "POST",
     body: JSON.stringify(dogInfo),
   });
@@ -100,8 +100,8 @@ export const createProfile = (userId, dogInfo) => async (dispatch) => {
   return response;
 };
 
-export const editProfile = (dogId, dogInfo) => async (dispatch) => {
-  const response = await csrfFetch(`/api/dogs/${dogId}`, {
+export const editProfile = (dogInfo) => async (dispatch) => {
+  const response = await csrfFetch(`/api/dogs`, {
     method: "PUT",
     body: JSON.stringify(dogInfo),
   });
@@ -116,8 +116,9 @@ export const editProfile = (dogId, dogInfo) => async (dispatch) => {
 };
 
 export const deleteProfile = (dogId) => async (dispatch) => {
-  const response = await csrfFetch(`/api/dogs/${dogId}`, {
+  const response = await csrfFetch(`/api/dogs`, {
     method: "DELETE",
+    body: JSON.stringify(dogId),
   });
   dispatch(removeProfile());
   return response;

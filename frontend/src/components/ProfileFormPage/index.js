@@ -16,7 +16,7 @@ const ProfileFormPage = () => {
       const data = await res.json();
       console.log(data);
     });
-  }, [user]);
+  }, [dispatch, user]);
 
   if (!user) return null;
   return (
