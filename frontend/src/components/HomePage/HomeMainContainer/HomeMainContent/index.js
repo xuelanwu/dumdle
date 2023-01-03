@@ -66,7 +66,7 @@ const HomeMainContent = () => {
           <div className="home-content-card">
             <div className="home-content-card-split left">
               <img
-                src={dog.DogImages[0].url}
+                src={dog.DogImages && dog.DogImages[0].url}
                 className="home-content-img"
               ></img>
             </div>
@@ -101,7 +101,7 @@ const HomeMainContent = () => {
 
           <div className="home-content-card">
             <div className="home-content-card-nonsplit">
-              <img src={dog.DogImages[1].url}></img>
+              <img src={dog.DogImages && dog.DogImages[1].url}></img>
             </div>
           </div>
         </div>

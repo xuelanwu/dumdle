@@ -17,7 +17,7 @@ const ProfileSideBarHeader = () => {
         <i className="fa-solid fa-angle-left"></i>
       </div>
       <div className="sidebar-avatar-block">
-        {dog ? (
+        {dog && dog.DogImages ? (
           <img src={dog.DogImages[0].url} alt="avatar-blue"></img>
         ) : (
           <img

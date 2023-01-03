@@ -12,35 +12,31 @@ const setProfileImages = (images) => {
   };
 };
 
-export const addImage = (userId, img) => async (dispatch) => {
-  const imageRef = ref(storage, `dog-images/${userId}/${Date.now()}`);
-  uploadBytes(imageRef, img).then(() => {
-    console.log("************ img uploaded");
-  });
-  const images = ref(storage, `dog-images/${userId}/`);
-  listAll(images).then((res) =>
-    res.items.forEach((item) =>
-      getDownloadURL(item).then(
-        async (url) =>
-          await csrfFetch(`/api/dogs/images`, {
-            method: "POST",
-            body: JSON.stringify(img),
-          })
-      )
-    )
-  );
+export const addImages = (dogId, imgArr) => async (dispatch) => {
+  const promises = [];
+  for (let i = 0; i < imgArr.length; i++) {
+    const img = imgArr[i];
+    const imageRef = ref(storage, `dog-images/${dogId}/${i}`);
+    promises.push(
+      uploadBytes(imageRef, img).then((res) => getDownloadURL(res.ref))
+    );
+  }
+  const urlArr = await Promise.all(promises);
+
   const response = await csrfFetch(`/api/dogs/images`, {
     method: "POST",
-    body: JSON.stringify(img),
+    body: JSON.stringify({ dogId, urls: urlArr }),
   });
+
   if (response.ok) {
     const data = await response.json();
+    // dispatch(setProfileImages(data));
 
-    console.log("************* create img data", data);
     return data;
   }
   return response;
 };
+
 const initialState = {};
 
 const imageReducer = (state = initialState, action) => {

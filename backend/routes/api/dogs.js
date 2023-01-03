@@ -92,7 +92,7 @@ router.put("/", requireAuth, async (req, res, next) => {
 router.delete("/", requireAuth, async (req, res, next) => {
   const userId = req.user.id;
   const { dogId } = req.body;
-  console.log("***************** dogId", dogId);
+
   const dog = await Dog.findByPk(dogId);
 
   if (!dog) {
@@ -120,9 +120,11 @@ router.delete("/", requireAuth, async (req, res, next) => {
 
 router.post("/images", requireAuth, async (req, res, next) => {
   const userId = req.user.id;
-  const { dogId, url } = req.body;
+  const { dogId, urls } = req.body;
 
   const dog = await Dog.findByPk(dogId);
+
+  // const dog = await Dog.findByPk(dogId);
   if (!dog) {
     const err = new Error("Not Found");
     err.title = "Not Found";
@@ -132,11 +134,25 @@ router.post("/images", requireAuth, async (req, res, next) => {
   }
 
   if (userId === dog.dataValues.ownerId) {
-    const image = await DogImage.create({
-      dogId,
-      url,
+    const images = await DogImage.findAll({
+      where: { dogId },
     });
-    return res.json(image);
+    if (images.length > 0) {
+      const updates = urls.map((url) =>
+        DogImage.update({ url }, { where: { dogId } })
+      );
+      const updatedImages = await Promise.all(updates);
+      return res.json(updatedImages);
+    } else {
+      const newImages = await DogImage.bulkCreate([
+        { dogId, url: urls[0] },
+        { dogId, url: urls[1] },
+        { dogId, url: urls[2] },
+      ]);
+      return res.json(newImages);
+    }
+
+    // return res.json(image);
   } else {
     const err = new Error("Unauthorized");
     err.title = "Unauthorized";

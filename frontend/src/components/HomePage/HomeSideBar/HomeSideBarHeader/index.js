@@ -15,7 +15,7 @@ const HomeSideBarHeader = () => {
   return (
     <div className="sidebar-header-container home" onClick={handleClick}>
       <div className="sidebar-avatar-block">
-        {dog ? (
+        {dog && dog.DogImages ? (
           <img src={dog.DogImages[0].url} alt="avatar-blue"></img>
         ) : (
           <img

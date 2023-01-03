@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+
 import {
   createProfile,
   deleteProfile,
   editProfile,
+  addImages,
 } from "../../../../store/session";
-import ProfileImageContaienr from "../ProfileImageContainer";
+// import { addImages } from "../../../../store/image";
 
 import { AGE, SIZE } from "./constants";
 
@@ -18,6 +20,8 @@ const ProfileMainContent = () => {
   const user = useSelector((state) => state.session.user);
   const dog = useSelector((state) => state.session.profile);
 
+  const [imgArr, setImgArr] = useState([]);
+
   const [name, setName] = useState("");
   const [age, setAge] = useState("age");
   const [gender, setGender] = useState("");
@@ -26,14 +30,14 @@ const ProfileMainContent = () => {
   const [description, setDescription] = useState("");
 
   const [errors, setErrors] = useState([]);
+  const [imgErrors, setImgErrors] = useState([]);
 
   const [showAgeMenu, setShowAgeMenu] = useState(false);
   const [showSizeMenu, setShowSizeMenu] = useState(false);
 
   useEffect(() => {
     if (dog) {
-      console.log("************* dog", dog);
-      const { name, age, gender, size, breed, description } = dog;
+      const { name, age, gender, size, breed, description, DogImages } = dog;
       setName(name);
       setAge(age);
       setGender(gender);
@@ -92,18 +96,25 @@ const ProfileMainContent = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const dogInfo = { name, age, gender, size, breed, description };
-    // console.log("***************** dogINFO", dogInfo);
+    if (imgArr.length !== 3) return setErrors(["Please upload 3 images"]);
     return dispatch(
       dog && user.id === dog.ownerId
         ? editProfile({ ...dogInfo, dogId: dog.id })
         : createProfile(dogInfo)
     )
-      .then(() => history.push("/"))
+      .then((dog) => addImages(dog.id, imgArr))
+      .then(() => history.push("/home"))
       .catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) setErrors(data.errors);
       });
   };
+
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   return dispatch(addImages(user.id, imgArr));
+  // };
+
   const handleDelete = (e) => {
     e.preventDefault();
     return dispatch(
@@ -116,10 +127,91 @@ const ProfileMainContent = () => {
     });
   };
 
+  const handleDrag = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (e.dataTransfer.files.length + imgArr.length > 3) {
+      return setImgErrors(["Please upload 3 images"]);
+    } else if (e.dataTransfer.files.length > 0) {
+      for (let i = 0; i < e.dataTransfer.files.length; i++) {
+        const img = e.dataTransfer.files[i];
+        console.log("*********** img type", typeof ImageBitmapRenderingContext);
+        setImgArr((prev) => [...prev, img]);
+      }
+    }
+  };
+
+  const handleImageDelete = (e, n) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const images = [...imgArr];
+    images.splice(n, 1);
+    setImgArr(images);
+  };
+
   return (
     <div className="main-content-container profile">
       <form className="profile-form" onSubmit={handleSubmit}>
-        <ProfileImageContaienr user={user} />
+        <div
+          className="profile-image-container profile-form-block"
+          onDrop={handleDrop}
+          onDragEnter={handleDrag}
+          onDragOver={handleDrag}
+        >
+          <input
+            type="file"
+            id="upload-images"
+            className="profile-upload"
+            multiple={true}
+            accept="image/jpeg, image/jpg, image/png"
+          ></input>
+          <label htmlFor="upload-images" className="upload-image-label">
+            <div className="upload-image-grid-container">
+              {[...Array(3).keys()].map((n) => (
+                <div className="profile-img-grid-item" key={`profile-img-${n}`}>
+                  {imgArr.length > n ? (
+                    <div className="profile-img-grid-box">
+                      <img
+                        className="profile-img"
+                        src={URL.createObjectURL(imgArr[n])}
+                      ></img>
+                      {/* <div className="profile-img-cross-button"> */}
+                      <button
+                        className="profile-img-cross-button"
+                        onClick={(e) => handleImageDelete(e, n)}
+                        value={n}
+                      >
+                        <i className="fa-solid fa-xmark fa-xl"></i>
+                      </button>
+                      {/* </div> */}
+                    </div>
+                  ) : (
+                    <i className="fa-solid fa-plus fa-2xl"></i>
+                  )}
+                </div>
+              ))}
+
+              {/* <div className="upload-image-grid-right-top upload-image-grid-item">
+            <i className="fa-solid fa-plus fa-2xl"></i>
+          </div>
+          <div className="upload-image-grid-right-bottom upload-image-grid-item">
+            <i className="fa-solid fa-plus fa-2xl"></i>
+          </div> */}
+            </div>
+          </label>
+        </div>
+
+        <ul>
+          {imgErrors.length > 0 &&
+            imgErrors.map((error, idx) => <li key={idx}>{error}</li>)}
+        </ul>
+
         <div className="profile-form-block">
           <label className="profile-label" htmlFor="name">
             <span>Name</span>
@@ -346,6 +438,11 @@ const ProfileMainContent = () => {
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
         </div>
+
+        <ul>
+          {errors.length > 0 &&
+            errors.map((error, idx) => <li key={idx}>{error}</li>)}
+        </ul>
 
         {dog && (
           <div className="profile-form-block profile-input profile-delete-block">
