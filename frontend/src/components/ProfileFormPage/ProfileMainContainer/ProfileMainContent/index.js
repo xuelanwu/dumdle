@@ -1,3 +1,4 @@
+import { getStorage } from "firebase/storage";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
