@@ -68,48 +68,47 @@ router.get("/", requireAuth, async (req, res) => {
         model: Friend,
         where: {
           dogId_1: dogIdNum,
-          dogId_2: Sequelize.col("dog.id"),
           status: "initial",
         },
       },
       { model: DogImage },
     ],
   });
-  return res.json(friend);
-  // if (friend) {
-  //   console.log("************** one friend", friend);
-  //   return res.json(friend);
-  // } else {
-  //   const friends = await Friend.findAll({
-  //     where: {
-  //       [Op.or]: [{ dogId_1: dogId }, { dogId_2: dogId }],
-  //       status: { [Op.ne]: "pending" },
-  //     },
-  //   });
-  //   const friendIds = friends.map((friend) => {
-  //     if (friend.dogId_1 === parseInt(dogId)) return friend.dogId_2;
-  //     else return friend.dogId_1;
-  //   });
-  //   const newFriend = await Dog.findOne({
-  //     where: {
-  //       ownerId: {
-  //         [Op.ne]: userId,
-  //       },
-  //       id: {
-  //         [Op.notIn]: [...friendIds],
-  //         [Op.ne]: dogIdNum,
-  //       },
-  //     },
-  //     include: [
-  //       {
-  //         model: DogImage,
-  //       },
-  //     ],
-  //   });
-  //   if (newFriend) {
-  //     return res.json(newFriend);
-  //   } else return res.json(null);
-  // }
+
+  if (friend) {
+    console.log("************** one friend", friend);
+    return res.json(friend);
+  } else {
+    const friends = await Friend.findAll({
+      where: {
+        [Op.or]: [{ dogId_1: dogId }, { dogId_2: dogId }],
+        status: { [Op.ne]: "pending" },
+      },
+    });
+    const friendIds = friends.map((friend) => {
+      if (friend.dogId_1 === parseInt(dogId)) return friend.dogId_2;
+      else return friend.dogId_1;
+    });
+    const newFriend = await Dog.findOne({
+      where: {
+        ownerId: {
+          [Op.ne]: userId,
+        },
+        id: {
+          [Op.notIn]: [...friendIds],
+          [Op.ne]: dogIdNum,
+        },
+      },
+      include: [
+        {
+          model: DogImage,
+        },
+      ],
+    });
+    if (newFriend) {
+      return res.json(newFriend);
+    } else return res.json(null);
+  }
 });
 
 router.post("/", requireAuth, async (req, res) => {
