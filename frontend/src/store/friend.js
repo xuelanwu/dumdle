@@ -20,7 +20,7 @@ const setMatches = (matches) => {
 
 export const getDog = (dogId) => async (dispatch) => {
   console.log("************** dogId", dogId);
-  const response = await csrfFetch(`/api/friends?dogId=${dogId}`);
+  const response = await csrfFetch(`/api/friends/?dogId=${dogId}`);
   console.log("**************** getDog response", response);
   if (response.ok) {
     const data = await response.json();
