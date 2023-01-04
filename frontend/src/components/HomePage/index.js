@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 
-import { addFriend, getDog } from "../../store/friend";
+import { getDog } from "../../store/friend";
 
 import HomeSideBar from "./HomeSideBar";
 import HomeMainContainer from "./HomeMainContainer";
@@ -17,7 +17,10 @@ const HomePage = () => {
 
   useEffect(() => {
     dispatch(getProfile(user.id))
-      .then((dog) => dispatch(getDog(dog.id)))
+      .then((dog) => {
+        console.log("****************** home page dispatch", dog);
+        dispatch(getDog(dog.id));
+      })
       .catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) setErrors(data.errors);
