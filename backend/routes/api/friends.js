@@ -30,9 +30,11 @@ router.get("/matches", requireAuth, async (req, res) => {
         model: DogImage,
       },
     });
-    console.log("************** matches friend in if", friends);
-    if (matches) return res.json(matches);
-    else return res.json(null);
+    console.log("************** friend in if", friends);
+    if (matches) {
+      console.log("************** matches in if", matches);
+      return res.json(matches);
+    } else return res.json(null);
   } else return res.json(null);
 });
 
