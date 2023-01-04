@@ -19,10 +19,12 @@ const setMatches = (matches) => {
 };
 
 export const getDog = (dogId) => async (dispatch) => {
+  console.log("************** dogId", dogId);
   const response = await csrfFetch(`/api/friends?dogId=${dogId}`);
+  console.log("**************** getDog response", response);
   if (response.ok) {
     const data = await response.json();
-    console.log("**************** newDog data", data);
+    console.log("**************** getDog data", data);
     dispatch(setDog(data));
     const res = await csrfFetch(`/api/friends`, {
       method: "POST",
