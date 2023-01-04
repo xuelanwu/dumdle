@@ -68,7 +68,7 @@ router.get("/", requireAuth, async (req, res) => {
         model: Friend,
         where: {
           dogId_1: dogIdNum,
-          // dogId_2: Sequelize.col("dog.id"),
+          dogId_2: Sequelize.col("dog.id"),
           status: "initial",
         },
       },
