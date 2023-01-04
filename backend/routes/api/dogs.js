@@ -8,19 +8,7 @@ const { Dog, DogImage } = require("../../db/models");
 const router = express.Router();
 
 router.post("/", requireAuth, async (req, res, next) => {
-  const {
-    name,
-    age,
-    gender,
-    size,
-    breed,
-    description,
-    // fixed,
-    // houseTrained,
-    // energyLevel,
-    // goodWithCats,
-    // goodWithKids,
-  } = req.body;
+  const { name, age, gender, size, breed, description } = req.body;
 
   const dog = await Dog.create({
     ownerId: req.user.id,
@@ -30,11 +18,6 @@ router.post("/", requireAuth, async (req, res, next) => {
     size,
     breed,
     description,
-    // fixed,
-    // houseTrained,
-    // energyLevel,
-    // goodWithCats,
-    // goodWithKids,
   });
   return res.json(dog);
 });

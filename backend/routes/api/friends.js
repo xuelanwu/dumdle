@@ -60,55 +60,55 @@ router.get("/", requireAuth, async (req, res) => {
   console.log("************** get new dog userId", userId);
   const { dogId } = req.query;
   const dogIdNum = parseInt(dogId);
-  console.log("************** get dog", dogId);
-
-  const friend = await Dog.findOne({
-    include: [
-      {
-        model: Friend,
-        where: {
-          dogId_1: dogIdNum,
-          dogId_2: Sequelize.col("dog.id"),
-          status: "initial",
-        },
-      },
-      { model: DogImage },
-    ],
-  });
-  if (friend) {
-    console.log("************** one friend", friend);
-    return res.json(friend);
-  } else {
-    const friends = await Friend.findAll({
-      where: {
-        [Op.or]: [{ dogId_1: dogId }, { dogId_2: dogId }],
-        status: { [Op.ne]: "pending" },
-      },
-    });
-    const friendIds = friends.map((friend) => {
-      if (friend.dogId_1 === parseInt(dogId)) return friend.dogId_2;
-      else return friend.dogId_1;
-    });
-    const newFriend = await Dog.findOne({
-      where: {
-        ownerId: {
-          [Op.ne]: userId,
-        },
-        id: {
-          [Op.notIn]: [...friendIds],
-          [Op.ne]: dogIdNum,
-        },
-      },
-      include: [
-        {
-          model: DogImage,
-        },
-      ],
-    });
-    if (newFriend) {
-      return res.json(newFriend);
-    } else return res.json(null);
-  }
+  console.log("************** get dog", dogIdNum);
+  return res.json("hello");
+  // const friend = await Dog.findOne({
+  //   include: [
+  //     {
+  //       model: Friend,
+  //       where: {
+  //         dogId_1: dogIdNum,
+  //         dogId_2: Sequelize.col("dog.id"),
+  //         status: "initial",
+  //       },
+  //     },
+  //     { model: DogImage },
+  //   ],
+  // });
+  // if (friend) {
+  //   console.log("************** one friend", friend);
+  //   return res.json(friend);
+  // } else {
+  //   const friends = await Friend.findAll({
+  //     where: {
+  //       [Op.or]: [{ dogId_1: dogId }, { dogId_2: dogId }],
+  //       status: { [Op.ne]: "pending" },
+  //     },
+  //   });
+  //   const friendIds = friends.map((friend) => {
+  //     if (friend.dogId_1 === parseInt(dogId)) return friend.dogId_2;
+  //     else return friend.dogId_1;
+  //   });
+  //   const newFriend = await Dog.findOne({
+  //     where: {
+  //       ownerId: {
+  //         [Op.ne]: userId,
+  //       },
+  //       id: {
+  //         [Op.notIn]: [...friendIds],
+  //         [Op.ne]: dogIdNum,
+  //       },
+  //     },
+  //     include: [
+  //       {
+  //         model: DogImage,
+  //       },
+  //     ],
+  //   });
+  //   if (newFriend) {
+  //     return res.json(newFriend);
+  //   } else return res.json(null);
+  // }
 });
 
 router.post("/", requireAuth, async (req, res) => {
