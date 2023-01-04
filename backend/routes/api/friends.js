@@ -16,7 +16,7 @@ router.get("/matches", requireAuth, async (req, res) => {
       status: "matched",
     },
   });
-  console.log("************** friend");
+  console.log("************** matches friend", friends);
   if (friends) {
     const matchIds = friends.map((friend) => {
       if (friend.dogId_1 === parseInt(dogId)) return friend.dogId_2;
@@ -30,6 +30,7 @@ router.get("/matches", requireAuth, async (req, res) => {
         model: DogImage,
       },
     });
+    console.log("************** matches friend in if", friends);
     if (matches) return res.json(matches);
     else return res.json(null);
   } else return res.json(null);
@@ -51,7 +52,10 @@ router.get("/pending", requireAuth, async (req, res) => {
 });
 
 router.get("/", requireAuth, async (req, res) => {
+  console.log("************** get new dog empty");
+  console.log("************** get new dog", req.originalUrl);
   const userId = req.user.id;
+  console.log("************** get new dog userId", userId);
   const { dogId } = req.query;
   const dogIdNum = parseInt(dogId);
   console.log("************** get dog", dogId);
