@@ -61,20 +61,21 @@ router.get("/", requireAuth, async (req, res) => {
   const { dogId } = req.query;
   const dogIdNum = parseInt(dogId);
   console.log("************** get dog", dogIdNum);
-  return res.json("hello");
-  // const friend = await Dog.findOne({
-  //   include: [
-  //     {
-  //       model: Friend,
-  //       where: {
-  //         dogId_1: dogIdNum,
-  //         dogId_2: Sequelize.col("dog.id"),
-  //         status: "initial",
-  //       },
-  //     },
-  //     { model: DogImage },
-  //   ],
-  // });
+
+  const friend = await Dog.findOne({
+    include: [
+      {
+        model: Friend,
+        where: {
+          dogId_1: dogIdNum,
+          // dogId_2: Sequelize.col("dog.id"),
+          status: "initial",
+        },
+      },
+      { model: DogImage },
+    ],
+  });
+  return res.json(friend);
   // if (friend) {
   //   console.log("************** one friend", friend);
   //   return res.json(friend);
