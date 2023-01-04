@@ -40,8 +40,7 @@ router.post("/", requireAuth, async (req, res, next) => {
 });
 
 router.get("/", requireAuth, async (req, res, next) => {
-  const { userId } = req.query;
-
+  const userId = req.user.id;
   const dog = await Dog.findOne({
     where: { ownerId: userId },
     include: [
@@ -145,9 +144,9 @@ router.post("/images", requireAuth, async (req, res, next) => {
       return res.json(updatedImages);
     } else {
       const newImages = await DogImage.bulkCreate([
-        { dogId, url: urls[0] },
-        { dogId, url: urls[1] },
-        { dogId, url: urls[2] },
+        { dogId, url: urls[0], blockId: 1 },
+        { dogId, url: urls[1], blockId: 2 },
+        { dogId, url: urls[2], blockId: 3 },
       ]);
       return res.json(newImages);
     }

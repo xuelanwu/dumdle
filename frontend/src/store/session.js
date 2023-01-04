@@ -85,6 +85,7 @@ export const getProfile = (userId) => async (dispatch) => {
   const response = await csrfFetch(`/api/dogs?userId=${userId}`);
   if (response.ok) {
     const data = await response.json();
+    console.log("**************** dog profile", data);
     dispatch(setProfile(data));
     return data;
   }

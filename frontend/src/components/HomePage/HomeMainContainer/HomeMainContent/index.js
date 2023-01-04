@@ -1,17 +1,22 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getDog,
+  likeFriend,
+  addFriend,
+  blockFriend,
+} from "../../../../store/friend";
 import "./index.css";
 
 const HomeMainContent = () => {
+  const dispatch = useDispatch();
   const dog = useSelector((state) => state.session.profile);
+  const newDog = useSelector((state) => state.friend.dog);
   const [page, setPage] = useState(1);
+  const [errors, setErrors] = useState([]);
 
   const [scrolling, setScrolling] = useState(false);
   const [scrollDone, setScrollDone] = useState(true);
-
-  useEffect(() => {
-    console.log(dog);
-  }, [dog]);
 
   const handleOnWheelCapture = (e) => {
     const scroll = e.deltaY;
@@ -54,7 +59,24 @@ const HomeMainContent = () => {
     }
   };
 
+  const handleLike = (e) => {
+    e.preventDefault();
+    dispatch(likeFriend(dog.id, newDog.id)).catch(async (res) => {
+      const data = await res.json();
+      if (data && data.errors) setErrors(data.errors);
+    });
+  };
+
+  const handleBlock = (e) => {
+    e.preventDefault();
+    dispatch(blockFriend(dog.id, newDog.id)).catch(async (res) => {
+      const data = await res.json();
+      if (data && data.errors) setErrors(data.errors);
+    });
+  };
+
   if (!dog) return null;
+  if (!newDog) return null;
   return (
     <div className="main-content-container home">
       <div
@@ -66,43 +88,61 @@ const HomeMainContent = () => {
           <div className="home-content-card">
             <div className="home-content-card-split left">
               <img
-                src={dog.DogImages && dog.DogImages[0].url}
+                src={newDog.DogImages && newDog.DogImages[0].url}
                 className="home-content-img"
               ></img>
             </div>
             <div className="home-content-card-split right">
               <h2>
-                {`${dog.name}, ${dog.age}`}{" "}
+                {`${newDog.name}, ${newDog.age}`}{" "}
                 <span>
-                  {dog.gender === "female" ? (
+                  {newDog.gender === "female" ? (
                     <i className="fa-solid fa-venus"></i>
-                  ) : dog.gender === "male" ? (
+                  ) : newDog.gender === "male" ? (
                     <i className="fa-solid fa-mars"></i>
                   ) : (
                     <i className="fa-solid fa-neuter"></i>
                   )}
                 </span>
               </h2>
-              <p>{dog.breed}</p>
+              <p className="home-content-breed">{newDog.breed}</p>
             </div>
           </div>
 
           <div className="home-content-card">
             <div className="home-content-card-nonsplit">
-              <p>
-                <span>
-                  <i className="fa-solid fa-ellipsis"></i>
-                </span>
-                {` About ${dog.name}`}
-              </p>
-              <p>{dog.description}</p>
+              <div className="home-content-card-nonsplit-text">
+                <div className="home-content-about-block">
+                  <div className="home-content-about-icon">
+                    <i className="fa-solid fa-ellipsis fa-2xs"></i>
+                  </div>
+                  <p className="home-content-about">
+                    {` About ${newDog.name}`}
+                  </p>
+                </div>
+                <p className="home-content-description">{newDog.description}</p>
+              </div>
             </div>
           </div>
 
           <div className="home-content-card">
             <div className="home-content-card-nonsplit">
-              <img src={dog.DogImages && dog.DogImages[1].url}></img>
+              <img src={newDog.DogImages && newDog.DogImages[1].url}></img>
             </div>
+          </div>
+        </div>
+      </div>
+      <div className="home-button-container">
+        <div className="home-button-block">
+          <div className="home-button-box">
+            <button className="block-button">
+              <i className="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <div className="home-button-box">
+            <button className="like-button" onClick={handleLike}>
+              <i className="fa-solid fa-check" onClick={handleBlock}></i>
+            </button>
           </div>
         </div>
       </div>

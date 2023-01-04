@@ -15,6 +15,8 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
         hooks: true,
       });
+      Dog.hasMany(models.Friend, { foreignKey: "dogId_1" });
+      Dog.hasMany(models.Friend, { foreignKey: "dogId_2" });
     }
   }
   Dog.init(

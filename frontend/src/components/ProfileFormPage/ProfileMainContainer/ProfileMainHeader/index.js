@@ -5,7 +5,8 @@ import "./index.css";
 const ProfileMainHeader = () => {
   const history = useHistory();
   const dog = useSelector((state) => state.session.profile);
-  const handleClose = () => {
+  const handleClose = (e) => {
+    e.preventDefault();
     if (dog) history.push("/home");
     else history.push("/");
   };

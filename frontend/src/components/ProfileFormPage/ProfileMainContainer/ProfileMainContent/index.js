@@ -22,6 +22,7 @@ const ProfileMainContent = () => {
   const dog = useSelector((state) => state.session.profile);
 
   const [imgArr, setImgArr] = useState([]);
+  const [displayImgs, setDisplayImgs] = useState([]);
 
   const [name, setName] = useState("");
   const [age, setAge] = useState("age");

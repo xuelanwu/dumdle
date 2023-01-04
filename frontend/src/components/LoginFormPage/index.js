@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import * as sessionActions from "../../store/session";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import NavLogo from "../NavLogo";
 import { getProfile } from "../../store/session";
 
@@ -9,6 +9,7 @@ import "./index.css";
 
 function LoginFormPage() {
   const dispatch = useDispatch();
+  const history = useHistory();
   const sessionUser = useSelector((state) => state.session.user);
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
@@ -21,6 +22,7 @@ function LoginFormPage() {
     setErrors([]);
     return dispatch(sessionActions.login({ credential, password }))
       .then((data) => dispatch(getProfile(data.user.id)))
+      .then(() => history.push("/home"))
       .catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) setErrors(data.errors);
@@ -35,10 +37,14 @@ function LoginFormPage() {
         credential: "user1@user.io",
         password: "password1",
       })
-    ).catch(async (res) => {
-      const data = await res.json();
-      if (data && data.errors) setErrors(data.errors);
-    });
+    )
+      .then((data) => dispatch(getProfile(data.user.id)))
+      .then(() => history.push("/home"))
+      .then((result) => console.log("********** result", result))
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) setErrors(data.errors);
+      });
   };
   const handleFacebook = (e) => {
     e.preventDefault();
@@ -48,10 +54,14 @@ function LoginFormPage() {
         credential: "user2@user.io",
         password: "password2",
       })
-    ).catch(async (res) => {
-      const data = await res.json();
-      if (data && data.errors) setErrors(data.errors);
-    });
+    )
+      .then(() => history.push("/home"))
+      .then((data) => dispatch(getProfile(data.user.id)))
+      .then((result) => console.log("********** result", result))
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) setErrors(data.errors);
+      });
   };
 
   return (
