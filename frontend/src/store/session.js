@@ -132,7 +132,6 @@ export const deleteProfile = (dogId) => async (dispatch) => {
 };
 
 export const addImages = (dogId, imgArr) => async (dispatch) => {
-  console.log("****************img Aerr", imgArr);
   const urlArr = [];
   const promise = [];
   for (let i = 0; i < imgArr.length; i++) {
@@ -145,11 +144,10 @@ export const addImages = (dogId, imgArr) => async (dispatch) => {
       );
     } else urlArr.push(imgArr[i]);
   }
-  console.log("*************** urlArr", urlArr);
+
   const resArr = await Promise.all(promise);
-  console.log("*************** resArr", resArr);
+
   const urls = [...urlArr, ...resArr];
-  console.log("****************** urls", urls);
 
   const response = await csrfFetch(`/api/dogs/images`, {
     method: "POST",
