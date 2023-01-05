@@ -19,7 +19,6 @@ function SignupFormPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (email === "") {
       return setErrors(["Email cannot be empty"]);
     } else if (password === "") {

@@ -46,7 +46,7 @@ router.get("/pending", requireAuth, async (req, res) => {
       status: "pending",
     },
   });
-  console.log("************** friend", friends);
+
   if (friends) {
     return res.json(friends);
   } else return res.json(null);

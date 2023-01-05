@@ -19,6 +19,11 @@ function LoginFormPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (credential === "") {
+      return setErrors(["Email cannot be empty"]);
+    } else if (password === "") {
+      return setErrors(["Password cannot be empty"]);
+    }
     setErrors([]);
     return dispatch(sessionActions.login({ credential, password }))
       .then((data) => dispatch(getProfile(data.user.id)))
@@ -46,6 +51,7 @@ function LoginFormPage() {
         if (data && data.errors) setErrors(data.errors);
       });
   };
+
   const handleFacebook = (e) => {
     e.preventDefault();
     setErrors([]);

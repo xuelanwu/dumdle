@@ -25,7 +25,7 @@ const ProfileMainContent = () => {
   const [previewImgArr, setPreviewImgArr] = useState([]);
 
   const [name, setName] = useState("");
-  const [age, setAge] = useState("age");
+  const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
   const [size, setSize] = useState("");
   const [breed, setBreed] = useState("");
@@ -45,15 +45,12 @@ const ProfileMainContent = () => {
         setImgArr([...urls]);
         setPreviewImgArr([...urls]);
       }
-
       setName(name);
       setAge(age);
       setGender(gender);
       setSize(size);
       setBreed(breed);
       setDescription(description);
-
-      console.log("*****************", DogImages);
     } else {
       setName("");
       setAge("");
@@ -85,7 +82,6 @@ const ProfileMainContent = () => {
 
   const openSizeMenu = (e) => {
     e.preventDefault();
-    console.log(e.target.innerText);
     if (showSizeMenu) return;
     const block = document.querySelector(".select-button.size");
     block.style.border = "1px solid #ffc629";
@@ -106,7 +102,21 @@ const ProfileMainContent = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const dogInfo = { name, age, gender, size, breed, description };
+
     if (imgArr.length !== 3) return setErrors(["Please upload 3 images"]);
+    else if (name === "") return setErrors(["Name cannot be empty"]);
+    else if (name.length > 20)
+      return setErrors(["No more than 20 characters plz :)"]);
+    else if (age === "") return setErrors(["Age cannot be empty"]);
+    else if (gender === "") return setErrors(["Gender cannot be empty"]);
+    else if (breed === "") return setErrors(["Breed cannot be empty"]);
+    else if (breed.length > 35)
+      return setErrors(["No more than 35 characters plz :)"]);
+    else if (size === "") return setErrors(["Size cannot be empty"]);
+    else if (description === "")
+      return setErrors(["Description cannot be empty"]);
+    else if (description.length > 250)
+      return setErrors(["No more than 250 characters plz :)"]);
     return dispatch(
       dog && user.id === dog.ownerId
         ? editProfile({ ...dogInfo, dogId: dog.id })
@@ -206,7 +216,6 @@ const ProfileMainContent = () => {
             <div className="upload-image-grid-container">
               {[...Array(3).keys()].map((n) => (
                 <div className="profile-img-grid-item" key={`profile-img-${n}`}>
-                  {console.log("*************** n", n)}
                   {previewImgArr.length > n ? (
                     <div className="profile-img-grid-box">
                       <img className="profile-img" src={previewImgArr[n]}></img>
