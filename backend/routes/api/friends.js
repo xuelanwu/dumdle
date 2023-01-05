@@ -53,13 +53,10 @@ router.get("/pending", requireAuth, async (req, res) => {
 });
 
 router.get("/", requireAuth, async (req, res) => {
-  console.log("************** get new dog empty");
-  console.log("************** get new dog", req.originalUrl);
   const userId = req.user.id;
-  console.log("************** get new dog userId", userId);
+
   const { dogId } = req.query;
   const dogIdNum = parseInt(dogId);
-  console.log("************** get dog", dogIdNum);
 
   const friend = await Dog.findOne({
     include: [
@@ -75,7 +72,6 @@ router.get("/", requireAuth, async (req, res) => {
   });
 
   if (friend) {
-    console.log("************** one friend", friend);
     return res.json(friend);
   } else {
     const friends = await Friend.findAll({
@@ -154,7 +150,7 @@ router.put("/like", requireAuth, async (req, res) => {
         status: "pending",
       });
       return res.json(updatedFriend);
-    } else if (friend.statu === "pending") {
+    } else if (friend.status === "pending") {
       const updatedFriend = await friend.update({
         status: "matched",
       });
