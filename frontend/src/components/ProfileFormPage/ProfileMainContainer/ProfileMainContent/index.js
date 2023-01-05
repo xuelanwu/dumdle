@@ -22,7 +22,7 @@ const ProfileMainContent = () => {
   const dog = useSelector((state) => state.session.profile);
 
   const [imgArr, setImgArr] = useState([]);
-  const [displayImgs, setDisplayImgs] = useState([]);
+  const [previewImgArr, setPreviewImgArr] = useState([]);
 
   const [name, setName] = useState("");
   const [age, setAge] = useState("age");
@@ -40,12 +40,20 @@ const ProfileMainContent = () => {
   useEffect(() => {
     if (dog) {
       const { name, age, gender, size, breed, description, DogImages } = dog;
+      if (DogImages) {
+        const urls = Object.values(DogImages).map((imgObj) => imgObj.url);
+        setImgArr([...urls]);
+        setPreviewImgArr([...urls]);
+      }
+
       setName(name);
       setAge(age);
       setGender(gender);
       setSize(size);
       setBreed(breed);
       setDescription(description);
+
+      console.log("*****************", DogImages);
     } else {
       setName("");
       setAge("");
@@ -104,7 +112,7 @@ const ProfileMainContent = () => {
         ? editProfile({ ...dogInfo, dogId: dog.id })
         : createProfile(dogInfo)
     )
-      .then((dog) => addImages(dog.id, imgArr))
+      .then((dog) => dispatch(addImages(dog.id, imgArr)))
       .then(() => history.push("/home"))
       .catch(async (res) => {
         const data = await res.json();
@@ -143,8 +151,9 @@ const ProfileMainContent = () => {
     } else if (e.dataTransfer.files.length > 0) {
       for (let i = 0; i < e.dataTransfer.files.length; i++) {
         const img = e.dataTransfer.files[i];
-        console.log("*********** img type", typeof ImageBitmapRenderingContext);
+        const previewImg = URL.createObjectURL(img);
         setImgArr((prev) => [...prev, img]);
+        setPreviewImgArr((prev) => [...prev, previewImg]);
       }
     }
   };
@@ -153,8 +162,27 @@ const ProfileMainContent = () => {
     e.preventDefault();
     e.stopPropagation();
     const images = [...imgArr];
+    const previewImg = [...previewImgArr];
     images.splice(n, 1);
+    previewImg.splice(n, 1);
     setImgArr(images);
+    setPreviewImgArr(previewImg);
+  };
+
+  const handleImageChange = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (e.target.files.length + imgArr.length > 3) {
+      return setImgErrors(["Please upload 3 images"]);
+    } else if (e.target.files.length > 0) {
+      for (let i = 0; i < e.target.files.length; i++) {
+        const img = e.target.files[i];
+        const previewImg = URL.createObjectURL(img);
+        setImgArr((prev) => [...prev, img]);
+        setPreviewImgArr((prev) => [...prev, previewImg]);
+      }
+    }
   };
 
   return (
@@ -172,17 +200,16 @@ const ProfileMainContent = () => {
             className="profile-upload"
             multiple={true}
             accept="image/jpeg, image/jpg, image/png"
+            onChange={handleImageChange}
           ></input>
           <label htmlFor="upload-images" className="upload-image-label">
             <div className="upload-image-grid-container">
               {[...Array(3).keys()].map((n) => (
                 <div className="profile-img-grid-item" key={`profile-img-${n}`}>
-                  {imgArr.length > n ? (
+                  {console.log("*************** n", n)}
+                  {previewImgArr.length > n ? (
                     <div className="profile-img-grid-box">
-                      <img
-                        className="profile-img"
-                        src={URL.createObjectURL(imgArr[n])}
-                      ></img>
+                      <img className="profile-img" src={previewImgArr[n]}></img>
                       {/* <div className="profile-img-cross-button"> */}
                       <button
                         className="profile-img-cross-button"

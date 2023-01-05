@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 
 import { getDog } from "../../store/friend";
 
@@ -11,6 +11,7 @@ import { SDK_VERSION } from "firebase/app";
 
 const HomePage = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const user = useSelector((state) => state.session.user);
   const dog = useSelector((state) => state.session.profile);
   const [errors, setErrors] = useState([]);
@@ -18,8 +19,10 @@ const HomePage = () => {
   useEffect(() => {
     dispatch(getProfile(user.id))
       .then((dog) => {
-        console.log("****************** home page dispatch", dog);
-        dispatch(getDog(dog.id));
+        if (dog) dispatch(getDog(dog.id));
+        else {
+          return history.push("/profile");
+        }
       })
       .catch(async (res) => {
         const data = await res.json();

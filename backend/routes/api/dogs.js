@@ -120,19 +120,14 @@ router.post("/images", requireAuth, async (req, res, next) => {
       where: { dogId },
     });
     if (images.length > 0) {
-      const updates = urls.map((url) =>
-        DogImage.update({ url }, { where: { dogId } })
-      );
-      const updatedImages = await Promise.all(updates);
-      return res.json(updatedImages);
-    } else {
-      const newImages = await DogImage.bulkCreate([
-        { dogId, url: urls[0], blockId: 1 },
-        { dogId, url: urls[1], blockId: 2 },
-        { dogId, url: urls[2], blockId: 3 },
-      ]);
-      return res.json(newImages);
+      DogImage.destroy({ where: { dogId } });
     }
+    const newImages = await DogImage.bulkCreate([
+      { dogId, url: urls[0], blockId: 1 },
+      { dogId, url: urls[1], blockId: 2 },
+      { dogId, url: urls[2], blockId: 3 },
+    ]);
+    return res.json(newImages);
 
     // return res.json(image);
   } else {

@@ -82,7 +82,7 @@ export const logout = () => async (dispatch) => {
 };
 
 export const getProfile = (userId) => async (dispatch) => {
-  const response = await csrfFetch(`/api/dogs/?userId=${userId}`);
+  const response = await csrfFetch(`/api/dogs?userId=${userId}`);
   if (response.ok) {
     const data = await response.json();
 
@@ -97,11 +97,11 @@ export const createProfile = (dogInfo) => async (dispatch) => {
     method: "POST",
     body: JSON.stringify(dogInfo),
   });
-  console.log("************* response", response);
+
   if (response.ok) {
     const data = await response.json();
     dispatch(setProfile(data));
-    console.log("************* data", data);
+
     return data;
   }
   return response;
@@ -112,11 +112,11 @@ export const editProfile = (dogInfo) => async (dispatch) => {
     method: "PUT",
     body: JSON.stringify(dogInfo),
   });
-  console.log("************* response", response);
+
   if (response.ok) {
     const data = await response.json();
     dispatch(setProfile(data));
-    console.log("************* data", data);
+
     return data;
   }
   return response;
@@ -132,24 +132,33 @@ export const deleteProfile = (dogId) => async (dispatch) => {
 };
 
 export const addImages = (dogId, imgArr) => async (dispatch) => {
-  const promises = [];
+  console.log("****************img Aerr", imgArr);
+  const urlArr = [];
+  const promise = [];
   for (let i = 0; i < imgArr.length; i++) {
-    const img = imgArr[i];
-    const imageRef = ref(storage, `dog-images/${dogId}/${i}`);
-    promises.push(
-      uploadBytes(imageRef, img).then((res) => getDownloadURL(res.ref))
-    );
+    if (typeof imgArr[i] !== "string") {
+      const img = imgArr[i];
+      const imageRef = ref(storage, `dog-images/${dogId}/${Math.random()}`);
+
+      promise.push(
+        uploadBytes(imageRef, img).then((res) => getDownloadURL(res.ref))
+      );
+    } else urlArr.push(imgArr[i]);
   }
-  const urlArr = await Promise.all(promises);
+  console.log("*************** urlArr", urlArr);
+  const resArr = await Promise.all(promise);
+  console.log("*************** resArr", resArr);
+  const urls = [...urlArr, ...resArr];
+  console.log("****************** urls", urls);
 
   const response = await csrfFetch(`/api/dogs/images`, {
     method: "POST",
-    body: JSON.stringify({ dogId, urls: urlArr }),
+    body: JSON.stringify({ dogId, urls }),
   });
 
   if (response.ok) {
     const data = await response.json();
-    dispatch(getProfile(1));
+    dispatch(getProfile(dogId));
     return data;
   }
   return response;
@@ -175,7 +184,7 @@ const sessionReducer = (state = initialState, action) => {
     case REMOVE_PROFILE:
       newState = Object.assign({}, state);
       newState.profile = null;
-      console.log("**************** newState", newState);
+
       return newState;
     default:
       return state;

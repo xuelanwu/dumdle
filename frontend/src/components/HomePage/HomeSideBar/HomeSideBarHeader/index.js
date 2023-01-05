@@ -12,10 +12,11 @@ const HomeSideBarHeader = () => {
     e.preventDefault();
     history.push("/profile");
   };
+
   return (
     <div className="sidebar-header-container home" onClick={handleClick}>
       <div className="sidebar-avatar-block">
-        {dog && dog.DogImages ? (
+        {dog && dog.DogImages && dog.DogImages.length > 0 ? (
           <img src={dog.DogImages[0].url} alt="avatar-blue"></img>
         ) : (
           <img

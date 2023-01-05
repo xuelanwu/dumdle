@@ -5,10 +5,10 @@ import LogoutModal from "../../../LogoutModal";
 import "./index.css";
 
 const ProfileSideBarContent = () => {
-  const dog = useSelector((state) => state.profile);
+  const dog = useSelector((state) => state.session.profile);
   return (
     <div className="sidebar-content-container profile">
-      <p>Edit profile</p>
+      {dog ? <p>Edit profile</p> : <p>Create profile</p>}
       <LogoutModal />
     </div>
   );

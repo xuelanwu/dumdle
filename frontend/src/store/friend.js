@@ -19,22 +19,24 @@ const setMatches = (matches) => {
 };
 
 export const getDog = (dogId) => async (dispatch) => {
-  console.log("************** dogId", dogId);
-  const response = await csrfFetch(`/api/friends/?dogId=${dogId}`);
-  console.log("**************** getDog response", response);
+  const response = await csrfFetch(`/api/friends?dogId=${dogId}`);
+
   if (response.ok) {
     const data = await response.json();
-    console.log("**************** getDog data", data);
+
     dispatch(setDog(data));
-    const res = await csrfFetch(`/api/friends`, {
-      method: "POST",
-      body: JSON.stringify({ dogId_1: dogId, dogId_2: data.id }),
-    });
-    if (res.ok) {
-      const result = await res.json();
-      console.log("**************** initial result", result);
-      return result;
+    if (data) {
+      const res = await csrfFetch(`/api/friends`, {
+        method: "POST",
+        body: JSON.stringify({ dogId_1: dogId, dogId_2: data.id }),
+      });
+      if (res.ok) {
+        const result = await res.json();
+
+        return result;
+      }
     }
+
     return data;
   }
   return response;
@@ -48,7 +50,7 @@ export const likeFriend = (dogId_1, dogId_2) => async (dispatch) => {
   if (response.ok) {
     const data = await response.json();
     dispatch(getDog(dogId_1));
-    console.log("*************** friend", data);
+
     return data;
   }
   return response;
@@ -62,7 +64,7 @@ export const blockFriend = (dogId_1, dogId_2) => async (dispatch) => {
   if (response.ok) {
     const data = await response.json();
     dispatch(getDog(dogId_1));
-    console.log("*************** friend", data);
+
     return data;
   }
   return response;
@@ -73,7 +75,7 @@ export const getMatches = (dogId) => async (dispatch) => {
 
   if (response.ok) {
     const data = await response.json();
-    console.log("/*************/ matches", data);
+
     dispatch(setMatches(data));
     return data;
   }

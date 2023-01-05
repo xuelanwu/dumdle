@@ -76,76 +76,97 @@ const HomeMainContent = () => {
   };
 
   if (!dog) return null;
-  if (!newDog) return null;
+
   return (
     <div className="main-content-container home">
-      <div
-        className="home-content-container"
-        onWheelCapture={handleOnWheelCapture}
-        onWheel={handleOnWheel}
-      >
-        <div className="home-content-block">
-          <div className="home-content-card">
-            <div className="home-content-card-split left">
-              <img
-                src={newDog.DogImages && newDog.DogImages[0].url}
-                className="home-content-img"
-              ></img>
+      {newDog ? (
+        <div
+          className="home-content-container"
+          onWheelCapture={handleOnWheelCapture}
+          onWheel={handleOnWheel}
+        >
+          <div className="home-content-block">
+            <div className="home-content-card">
+              <div className="home-content-card-split left">
+                <img
+                  src={newDog.DogImages && newDog.DogImages[0].url}
+                  className="home-content-img"
+                ></img>
+              </div>
+              <div className="home-content-card-split right">
+                <h2>
+                  {`${newDog.name}, ${newDog.age}`}{" "}
+                  <span>
+                    {newDog.gender === "female" ? (
+                      <i className="fa-solid fa-venus"></i>
+                    ) : newDog.gender === "male" ? (
+                      <i className="fa-solid fa-mars"></i>
+                    ) : (
+                      <i className="fa-solid fa-neuter"></i>
+                    )}
+                  </span>
+                </h2>
+                <p className="home-content-breed">{newDog.breed}</p>
+              </div>
             </div>
-            <div className="home-content-card-split right">
-              <h2>
-                {`${newDog.name}, ${newDog.age}`}{" "}
-                <span>
-                  {newDog.gender === "female" ? (
-                    <i className="fa-solid fa-venus"></i>
-                  ) : newDog.gender === "male" ? (
-                    <i className="fa-solid fa-mars"></i>
-                  ) : (
-                    <i className="fa-solid fa-neuter"></i>
-                  )}
-                </span>
-              </h2>
-              <p className="home-content-breed">{newDog.breed}</p>
-            </div>
-          </div>
 
-          <div className="home-content-card">
-            <div className="home-content-card-nonsplit">
-              <div className="home-content-card-nonsplit-text">
-                <div className="home-content-about-block">
-                  <div className="home-content-about-icon">
-                    <i className="fa-solid fa-ellipsis fa-2xs"></i>
+            <div className="home-content-card">
+              <div className="home-content-card-nonsplit">
+                <div className="home-content-card-nonsplit-text">
+                  <div className="home-content-about-block">
+                    <div className="home-content-about-icon">
+                      <i className="fa-solid fa-ellipsis fa-2xs"></i>
+                    </div>
+                    <p className="home-content-about">
+                      {` About ${newDog.name}`}
+                    </p>
                   </div>
-                  <p className="home-content-about">
-                    {` About ${newDog.name}`}
+                  <p className="home-content-description">
+                    {newDog.description}
                   </p>
                 </div>
-                <p className="home-content-description">{newDog.description}</p>
+              </div>
+            </div>
+
+            <div className="home-content-card">
+              <div className="home-content-card-nonsplit">
+                <img src={newDog.DogImages && newDog.DogImages[1].url}></img>
               </div>
             </div>
           </div>
-
-          <div className="home-content-card">
-            <div className="home-content-card-nonsplit">
-              <img src={newDog.DogImages && newDog.DogImages[1].url}></img>
+        </div>
+      ) : (
+        <div className="home-content-container">
+          <div className="home-content-block ">
+            <div className="home-content-card boost">
+              <div className="home-content-card-nonsplit boost">
+                <h2>You've hit the end of the line —— for today!</h2>
+                <p className="home-content-boost">
+                  Want to see more amazing dog? Upgrade to Dumdle Boost, or wait
+                  until tomorrow for more potential conections
+                </p>
+                <div className="upgrade-box">Upgrade —— coming soon</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="home-button-container">
-        <div className="home-button-block">
-          <div className="home-button-box">
-            <button className="block-button">
-              <i className="fa-solid fa-xmark"></i>
-            </button>
-          </div>
-          <div className="home-button-box">
-            <button className="like-button" onClick={handleLike}>
-              <i className="fa-solid fa-check" onClick={handleBlock}></i>
-            </button>
+      )}
+      {newDog && (
+        <div className="home-button-container">
+          <div className="home-button-block">
+            <div className="home-button-box">
+              <button className="block-button">
+                <i className="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+            <div className="home-button-box">
+              <button className="like-button" onClick={handleLike}>
+                <i className="fa-solid fa-check" onClick={handleBlock}></i>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

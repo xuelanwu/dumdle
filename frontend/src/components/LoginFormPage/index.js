@@ -40,7 +40,7 @@ function LoginFormPage() {
     )
       .then((data) => dispatch(getProfile(data.user.id)))
       .then(() => history.push("/home"))
-      .then((result) => console.log("********** result", result))
+
       .catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) setErrors(data.errors);
@@ -55,9 +55,8 @@ function LoginFormPage() {
         password: "password2",
       })
     )
-      .then(() => history.push("/home"))
       .then((data) => dispatch(getProfile(data.user.id)))
-      .then((result) => console.log("********** result", result))
+      .then(() => history.push("/home"))
       .catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) setErrors(data.errors);

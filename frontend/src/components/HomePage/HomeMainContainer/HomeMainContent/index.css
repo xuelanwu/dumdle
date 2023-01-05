@@ -164,3 +164,42 @@
 .block-button {
   color: #454650;
 }
+
+.home-content-boost {
+  text-align: center;
+}
+
+/* .home-content-card.boost {
+  border: 1px solid #dcdcdc;
+  background-color: white;
+} */
+
+.home-content-card-nonsplit.boost {
+  border: 1px solid #dcdcdc;
+  background-color: white;
+  border-radius: 1.25rem;
+  padding: 5rem;
+}
+
+.home-content-card-nonsplit.boost h2 {
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.home-content-card-nonsplit.boost p {
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.upgrade-box {
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.5;
+  background-color: #ffc629;
+  padding: 0.5rem 1rem;
+  color: white;
+  border-radius: 1.25rem;
+  margin-top: 1rem;
+}

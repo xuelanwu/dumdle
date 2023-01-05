@@ -16,7 +16,7 @@ router.get("/matches", requireAuth, async (req, res) => {
       status: "matched",
     },
   });
-  console.log("************** matches friend", friends);
+
   if (friends) {
     const matchIds = friends.map((friend) => {
       if (friend.dogId_1 === parseInt(dogId)) return friend.dogId_2;
@@ -30,9 +30,8 @@ router.get("/matches", requireAuth, async (req, res) => {
         model: DogImage,
       },
     });
-    console.log("************** friend in if", friends);
+
     if (matches) {
-      console.log("************** matches in if", matches);
       return res.json(matches);
     } else return res.json(null);
   } else return res.json(null);
