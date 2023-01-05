@@ -155,13 +155,13 @@ const HomeMainContent = () => {
         <div className="home-button-container">
           <div className="home-button-block">
             <div className="home-button-box">
-              <button className="block-button">
+              <button className="block-button" onClick={handleBlock}>
                 <i className="fa-solid fa-xmark"></i>
               </button>
             </div>
             <div className="home-button-box">
               <button className="like-button" onClick={handleLike}>
-                <i className="fa-solid fa-check" onClick={handleBlock}></i>
+                <i className="fa-solid fa-check"></i>
               </button>
             </div>
           </div>
