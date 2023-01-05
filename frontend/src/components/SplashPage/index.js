@@ -1,9 +1,12 @@
-import { useHistory } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
 import Navigation from "../Navigation";
 
 import "./index.css";
 
 const SplashPage = ({ isLoaded }) => {
+  const user = useSelector((state) => state.session.user);
+
   const history = useHistory();
 
   const handleSignup = () => {
@@ -14,6 +17,7 @@ const SplashPage = ({ isLoaded }) => {
     history.push("/login");
   };
 
+  if (user) return <Redirect to="/home" />;
   return (
     <>
       <Navigation isLoaded={isLoaded} />

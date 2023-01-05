@@ -101,7 +101,6 @@ export const createProfile = (dogInfo) => async (dispatch) => {
   if (response.ok) {
     const data = await response.json();
     dispatch(setProfile(data));
-
     return data;
   }
   return response;

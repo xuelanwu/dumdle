@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import * as sessionActions from "../../store/session";
+
+import { getProfile } from "../../store/session";
 
 import NavLogo from "../NavLogo";
 
@@ -15,25 +17,28 @@ function SignupFormPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState([]);
 
-  if (sessionUser) return <Redirect to="/home" />;
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (password === confirmPassword) {
-      setErrors([]);
-      return dispatch(
-        sessionActions.signup({
-          email,
-          password,
-        })
-      ).catch(async (res) => {
-        const data = await res.json();
-        if (data && data.errors) setErrors(data.errors);
-      });
+
+    if (email === "") {
+      return setErrors(["Email cannot be empty"]);
+    } else if (password === "") {
+      return setErrors(["Password cannot be empty"]);
+    } else if (password !== confirmPassword) {
+      return setErrors([
+        "Confirm Password field must be the same as the Password field",
+      ]);
     }
-    return setErrors([
-      "Confirm Password field must be the same as the Password field",
-    ]);
+    setErrors([]);
+    return dispatch(
+      sessionActions.signup({
+        email,
+        password,
+      })
+    ).catch(async (res) => {
+      const data = await res.json();
+      if (data && data.errors) setErrors(data.errors);
+    });
   };
 
   const handleApple = (e) => {
@@ -44,11 +49,14 @@ function SignupFormPage() {
         credential: "user1@user.io",
         password: "password1",
       })
-    ).catch(async (res) => {
-      const data = await res.json();
-      if (data && data.errors) setErrors(data.errors);
-    });
+    )
+      .then((data) => dispatch(getProfile(data.user.id)))
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) setErrors(data.errors);
+      });
   };
+
   const handleFacebook = (e) => {
     e.preventDefault();
     setErrors([]);
@@ -57,11 +65,15 @@ function SignupFormPage() {
         credential: "user2@user.io",
         password: "password2",
       })
-    ).catch(async (res) => {
-      const data = await res.json();
-      if (data && data.errors) setErrors(data.errors);
-    });
+    )
+      .then((data) => dispatch(getProfile(data.user.id)))
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) setErrors(data.errors);
+      });
   };
+
+  if (sessionUser) return <Redirect to="/home" />;
 
   return (
     <div className="auth-container">
@@ -112,7 +124,7 @@ function SignupFormPage() {
             placeholder="Confirm your password"
           />
 
-          <button type="submit">Log In</button>
+          <button type="submit">Sign Up</button>
         </form>
       </div>
     </div>

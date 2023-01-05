@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 
+import { getProfile } from "./store/session";
 import * as sessionActions from "./store/session";
 
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -15,9 +16,17 @@ import ProfileFormPage from "./components/ProfileFormPage";
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
+  const user = useSelector((state) => state.session.user);
+
   useEffect(() => {
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
   }, [dispatch]);
+
+  useEffect(() => {
+    if (user) {
+      dispatch(getProfile(user.id));
+    }
+  }, [user]);
 
   if (!isLoaded) {
     return null;
@@ -28,6 +37,7 @@ function App() {
         <Route path="/" exact>
           <SplashPage isLoaded={isLoaded} />
         </Route>
+
         <Route path="/login">
           <LoginFormPage />
         </Route>
