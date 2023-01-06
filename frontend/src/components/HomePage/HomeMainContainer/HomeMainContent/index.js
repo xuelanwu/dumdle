@@ -6,6 +6,7 @@ import {
   addFriend,
   blockFriend,
   getMatches,
+  getPendings,
 } from "../../../../store/friend";
 import "./index.css";
 
@@ -19,6 +20,10 @@ const HomeMainContent = () => {
 
   const [scrolling, setScrolling] = useState(false);
   const [scrollDone, setScrollDone] = useState(true);
+
+  useEffect(() => {
+    setPage(1);
+  }, [dog]);
 
   const handleOnWheelCapture = (e) => {
     const scroll = e.deltaY;
@@ -65,6 +70,7 @@ const HomeMainContent = () => {
     e.preventDefault();
     return dispatch(likeFriend(friend.id))
       .then(() => dispatch(getMatches(dog.id)))
+      .then(() => dispatch(getPendings(dog.id)))
       .then(() => dispatch(getDog(dog.id)))
       .catch(async (res) => {
         const data = await res.json();
@@ -74,9 +80,9 @@ const HomeMainContent = () => {
 
   const handleBlock = (e) => {
     e.preventDefault();
-    console.log("*************** friend.id", friend);
     return dispatch(blockFriend(friend.id))
       .then(() => dispatch(getDog(dog.id)))
+      .then(() => dispatch(getPendings(dog.id)))
       .catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) setErrors(data.errors);
