@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getMatches } from "../../../../store/friend";
+import { getMatches, getPendings } from "../../../../store/friend";
 import { getProfile } from "../../../../store/session";
 import { useHistory } from "react-router-dom";
 
@@ -12,11 +12,17 @@ const HomeSideBarContent = () => {
   const user = useSelector((state) => state.session.user);
   const dog = useSelector((state) => state.session.profile);
   const matches = useSelector((state) => state.friend.matched);
+  const pendings = useSelector((state) => state.friend.pending);
   const [errors, setErrors] = useState([]);
 
   useEffect(() => {
     if (dog) {
       dispatch(getMatches(dog.id)).catch(async (res) => {
+        const data = await res.json();
+        console.log(data);
+        if (data && data.errors) setErrors(data.errors);
+      });
+      dispatch(getPendings(dog.id)).catch(async (res) => {
         const data = await res.json();
         console.log(data);
         if (data && data.errors) setErrors(data.errors);
@@ -30,7 +36,23 @@ const HomeSideBarContent = () => {
 
   return (
     <div className="sidebar-content-container home">
-      {matches && Object.values(matches).length > 0 ? (
+      {pendings && Object.values(pendings).length > 0 && (
+        <div className="matches-container">
+          <h1>Pending Queue</h1>
+          {Object.values(pendings).map((pendingFriend) => (
+            <div
+              className="matches-block"
+              key={`match-${pendingFriend.Dog.id}`}
+            >
+              <div className="sidebar-avatar-block matches-box avatar">
+                <img src={pendingFriend.Dog.DogImages[0].url}></img>
+              </div>
+              <div className="matches-box name">{pendingFriend.Dog.name}</div>
+            </div>
+          ))}
+        </div>
+      )}
+      {matches && Object.values(matches).length > 0 && (
         <div className="matches-container">
           <h1>Matches</h1>
           {Object.values(matches).map((matchedDog) => (
@@ -42,7 +64,8 @@ const HomeSideBarContent = () => {
             </div>
           ))}
         </div>
-      ) : (
+      )}
+      {!matches && !pendings && (
         <div className="matches-container">
           <div className="matches-discover-container matches-discover-content">
             <div className="desktop-box">

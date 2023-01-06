@@ -3,6 +3,7 @@ import { csrfFetch } from "./csrf";
 
 const SET_DOG = "friend/setDog";
 const SET_MATCHES = "friend/setMatches";
+const SET_PENDINGS = "friend/setPendings";
 const SET_FRIENDSHIP = "friend/setFriendship";
 
 const setDog = (dog) => {
@@ -23,6 +24,13 @@ const setMatches = (matches) => {
   return {
     type: SET_MATCHES,
     matches,
+  };
+};
+
+const setPendings = (pendings) => {
+  return {
+    type: SET_PENDINGS,
+    pendings,
   };
 };
 
@@ -87,8 +95,18 @@ export const getMatches = (dogId) => async (dispatch) => {
 
   if (response.ok) {
     const data = await response.json();
-
     dispatch(setMatches(data));
+    return data;
+  }
+  return response;
+};
+
+export const getPendings = (dogId) => async (dispatch) => {
+  const response = await csrfFetch(`api/friends/pending?dogId=${dogId}`);
+
+  if (response.ok) {
+    const data = await response.json();
+    dispatch(setPendings(data));
     return data;
   }
   return response;
@@ -119,7 +137,14 @@ const friendReducer = (state = initialState, action) => {
         newState.matched[match.id] = match;
       });
       return newState;
-
+    case SET_PENDINGS:
+      newState = Object.assign({}, state);
+      newState.pending = {};
+      action.pendings.forEach((pending) => {
+        console.log("************** pending", pending);
+        newState.pending[pending.id] = pending;
+      });
+      return newState;
     default:
       return state;
   }

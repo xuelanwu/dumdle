@@ -1,9 +1,9 @@
 const express = require("express");
 
-const { requireAuth, restoreUser } = require("../../utils/auth");
+const { requireAuth } = require("../../utils/auth");
 const { Friend, Dog, DogImage } = require("../../db/models");
 
-const { Sequelize, Op } = require("sequelize");
+const { Op } = require("sequelize");
 
 const router = express.Router();
 
@@ -30,7 +30,6 @@ router.get("/matches", requireAuth, async (req, res) => {
         model: DogImage,
       },
     });
-
     if (matches) {
       return res.json(matches);
     } else return res.json(null);
@@ -42,8 +41,14 @@ router.get("/pending", requireAuth, async (req, res) => {
 
   const friends = await Friend.findAll({
     where: {
-      [Op.or]: [{ dogId_1: dogId }, { dogId_2: dogId }],
+      dogId_1: dogId,
       status: "pending",
+    },
+    include: {
+      model: Dog,
+      include: {
+        model: DogImage,
+      },
     },
   });
 
@@ -117,7 +122,7 @@ router.get("/", requireAuth, async (req, res) => {
   }
 });
 
-router.post("/", requireAuth, async (req, res) => {
+router.post("/", requireAuth, async (req, res, next) => {
   const userId = req.user.id;
   const { dogId_1, dogId_2 } = req.body;
 
@@ -157,21 +162,21 @@ router.post("/", requireAuth, async (req, res) => {
   }
 });
 
-router.put("/like", requireAuth, async (req, res) => {
+router.put("/like", requireAuth, async (req, res, next) => {
   const { friendId } = req.body;
+
   const friend = await Friend.findByPk(friendId);
   if (friend) {
     if (friend.status === "initial") {
       const updatedFriend = await friend.update({
         status: "pending",
       });
-      console.log("*************** update1 ", res.json(updatedFriend));
+
       return res.json(updatedFriend);
     } else if (friend.status === "pending") {
       const updatedFriend = await friend.update({
         status: "matched",
       });
-      console.log("*************** update 2", res.json(updatedFriend));
       return res.json(updatedFriend);
     }
   } else {
@@ -183,10 +188,9 @@ router.put("/like", requireAuth, async (req, res) => {
   }
 });
 
-router.put("/block", requireAuth, async (req, res) => {
-  console.log("************ body", req.body);
+router.put("/block", requireAuth, async (req, res, next) => {
   const { friendId } = req.body;
-  console.log("************* friendId", friendId);
+
   const friend = await Friend.findByPk(friendId);
   if (friend) {
     const updatedFriend = await friend.update({

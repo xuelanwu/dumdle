@@ -5,6 +5,7 @@ import {
   likeFriend,
   addFriend,
   blockFriend,
+  getMatches,
 } from "../../../../store/friend";
 import "./index.css";
 
@@ -63,6 +64,7 @@ const HomeMainContent = () => {
   const handleLike = (e) => {
     e.preventDefault();
     return dispatch(likeFriend(friend.id))
+      .then(() => dispatch(getMatches(dog.id)))
       .then(() => dispatch(getDog(dog.id)))
       .catch(async (res) => {
         const data = await res.json();

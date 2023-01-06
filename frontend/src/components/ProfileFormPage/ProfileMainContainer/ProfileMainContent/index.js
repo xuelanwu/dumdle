@@ -175,7 +175,6 @@ const ProfileMainContent = () => {
   };
 
   const handleImageChange = (e) => {
-    e.preventDefault();
     e.stopPropagation();
 
     if (e.target.files.length + imgArr.length > 3) {
@@ -206,6 +205,7 @@ const ProfileMainContent = () => {
             multiple={true}
             accept="image/jpeg, image/jpg, image/png"
             onChange={handleImageChange}
+            onClick={(e) => (e.target.value = null)}
           ></input>
           <label htmlFor="upload-images" className="upload-image-label">
             <div className="upload-image-grid-container">
