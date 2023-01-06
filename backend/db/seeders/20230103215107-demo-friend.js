@@ -23,7 +23,7 @@ module.exports = {
         {
           dogId_1: 1,
           dogId_2: 3,
-          status: "pending",
+          status: "initial",
         },
         {
           dogId_1: 4,
@@ -33,7 +33,7 @@ module.exports = {
         {
           dogId_1: 1,
           dogId_2: 5,
-          status: "initial",
+          status: "pending",
         },
         {
           dogId_1: 2,

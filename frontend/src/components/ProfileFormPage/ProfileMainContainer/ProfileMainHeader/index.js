@@ -16,9 +16,11 @@ const ProfileMainHeader = () => {
         <h3>Dog profile</h3>
       </div>
       <div className="close-button-block">
-        <button className="close-button" onClick={handleClose}>
-          <i className="fa-solid fa-xmark fa-2xl"></i>
-        </button>
+        {dog && (
+          <button className="close-button" onClick={handleClose}>
+            <i className="fa-solid fa-xmark fa-2xl"></i>
+          </button>
+        )}
       </div>
     </div>
   );

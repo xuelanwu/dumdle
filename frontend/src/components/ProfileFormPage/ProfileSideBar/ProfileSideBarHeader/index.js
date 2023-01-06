@@ -13,7 +13,9 @@ const ProfileSideBarHeader = () => {
 
   return (
     <div className="sidebar-header-container profile" onClick={handleClick}>
-      <div className="sidebar-header-arrow-block">
+      <div
+        className={`sidebar-header-arrow-block ${dog ? "show" : "transparent"}`}
+      >
         <i className="fa-solid fa-angle-left"></i>
       </div>
       <div className="sidebar-avatar-block">

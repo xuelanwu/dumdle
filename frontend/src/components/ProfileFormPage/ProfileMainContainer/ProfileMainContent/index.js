@@ -58,6 +58,8 @@ const ProfileMainContent = () => {
       setSize("");
       setBreed("");
       setDescription("");
+      setImgArr([]);
+      setPreviewImgArr([]);
     }
   }, [dog]);
 
@@ -130,21 +132,14 @@ const ProfileMainContent = () => {
       });
   };
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   return dispatch(addImages(user.id, imgArr));
-  // };
-
   const handleDelete = (e) => {
     e.preventDefault();
-    return dispatch(
-      dog &&
-        user.id === dog.ownerId &&
-        dispatch(deleteProfile({ dogId: dog.id }))
-    ).catch(async (res) => {
-      const data = await res.json();
-      if (data && data.errors) setErrors(data.errors);
-    });
+    if (dog && user.id === dog.ownerId) {
+      return dispatch(deleteProfile({ dogId: dog.id })).catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) setErrors(data.errors);
+      });
+    }
   };
 
   const handleDrag = (e) => {

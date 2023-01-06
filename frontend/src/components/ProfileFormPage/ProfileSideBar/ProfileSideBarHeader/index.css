@@ -1,3 +1,7 @@
 .sidebar-header-container.profile {
   column-gap: 8vw;
 }
+
+.sidebar-header-arrow-block.transparent {
+  color: transparent;
+}

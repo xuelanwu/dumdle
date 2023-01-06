@@ -81,6 +81,21 @@ module.exports = {
           age: 20,
           gender: "female",
           size: "small",
+          breed: "Golden Retriever",
+          description:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Pellentesque massa placerat duis ultricies lacus sed.",
+          // fixed: false,
+          // houseTrained: true,
+          // energyLevel: 1,
+          // goodWithCats: true,
+          // goodWithKids: true,
+        },
+        {
+          ownerId: 6,
+          name: "Sit",
+          age: 13,
+          gender: "male",
+          size: "giant",
           breed: "French Bulldog",
           description:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Pellentesque massa placerat duis ultricies lacus sed.",

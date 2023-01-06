@@ -45,8 +45,8 @@ function SignupFormPage() {
     setErrors([]);
     return dispatch(
       sessionActions.login({
-        credential: "user1@user.io",
-        password: "password1",
+        credential: "demo@user.io",
+        password: "password",
       })
     )
       .then((data) => dispatch(getProfile(data.user.id)))
@@ -61,8 +61,8 @@ function SignupFormPage() {
     setErrors([]);
     return dispatch(
       sessionActions.login({
-        credential: "user2@user.io",
-        password: "password2",
+        credential: "user1@user.io",
+        password: "password1",
       })
     )
       .then((data) => dispatch(getProfile(data.user.id)))

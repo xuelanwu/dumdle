@@ -84,13 +84,24 @@ router.get("/", requireAuth, async (req, res) => {
       if (friend.dogId_1 === parseInt(dogId)) return friend.dogId_2;
       else return friend.dogId_1;
     });
+
+    const pendingFriends = await Friend.findAll({
+      where: {
+        dogId_1: dogId,
+        status: "pending",
+      },
+    });
+    const pendingFriendIds = pendingFriends.map((friend) => friend.dogId_2);
+
+    const ids = [...friendIds, ...pendingFriendIds];
+
     const newFriend = await Dog.findOne({
       where: {
         ownerId: {
           [Op.ne]: userId,
         },
         id: {
-          [Op.notIn]: [...friendIds],
+          [Op.notIn]: [...ids],
           [Op.ne]: dogIdNum,
         },
       },
@@ -116,10 +127,20 @@ router.post("/", requireAuth, async (req, res) => {
     where: {
       dogId_1,
       dogId_2,
+      status: "initial",
+    },
+  });
+
+  const reverseFriend = await Friend.findOne({
+    where: {
+      dogId_1: dogId_2,
+      dogId_2: dogId_1,
+      status: "pending",
     },
   });
 
   if (friend) return res.json(friend);
+  else if (reverseFriend) return res.json(reverseFriend);
   else if (userId === dog.dataValues.ownerId) {
     const newFriend = await Friend.create({
       dogId_1,
@@ -137,23 +158,20 @@ router.post("/", requireAuth, async (req, res) => {
 });
 
 router.put("/like", requireAuth, async (req, res) => {
-  const { dogId_1, dogId_2 } = req.body;
-  const friend = await Friend.findOne({
-    where: {
-      dogId_1,
-      dogId_2,
-    },
-  });
+  const { friendId } = req.body;
+  const friend = await Friend.findByPk(friendId);
   if (friend) {
     if (friend.status === "initial") {
       const updatedFriend = await friend.update({
         status: "pending",
       });
+      console.log("*************** update1 ", res.json(updatedFriend));
       return res.json(updatedFriend);
     } else if (friend.status === "pending") {
       const updatedFriend = await friend.update({
         status: "matched",
       });
+      console.log("*************** update 2", res.json(updatedFriend));
       return res.json(updatedFriend);
     }
   } else {
@@ -166,13 +184,10 @@ router.put("/like", requireAuth, async (req, res) => {
 });
 
 router.put("/block", requireAuth, async (req, res) => {
-  const { dogId_1, dogId_2 } = req.body;
-  const friend = await Friend.findOne({
-    where: {
-      dogId_1,
-      dogId_2,
-    },
-  });
+  console.log("************ body", req.body);
+  const { friendId } = req.body;
+  console.log("************* friendId", friendId);
+  const friend = await Friend.findByPk(friendId);
   if (friend) {
     const updatedFriend = await friend.update({
       status: "rejected",

@@ -15,19 +15,16 @@ const HomeSideBarContent = () => {
   const [errors, setErrors] = useState([]);
 
   useEffect(() => {
-    dispatch(getProfile(user.id))
-      .then((dog) => {
-        if (dog) dispatch(getMatches(dog.id));
-        else {
-          return history.push("/profile");
-        }
-      })
-      .catch(async (res) => {
+    if (dog) {
+      dispatch(getMatches(dog.id)).catch(async (res) => {
         const data = await res.json();
         console.log(data);
         if (data && data.errors) setErrors(data.errors);
       });
-  }, [dispatch]);
+    } else {
+      return history.push("/profile");
+    }
+  }, [dog]);
 
   if (!dog) return null;
 
@@ -37,7 +34,7 @@ const HomeSideBarContent = () => {
         <div className="matches-container">
           <h1>Matches</h1>
           {Object.values(matches).map((matchedDog) => (
-            <div className="matches-block">
+            <div className="matches-block" key={`match-${matchedDog.id}`}>
               <div className="sidebar-avatar-block matches-box avatar">
                 <img src={matchedDog.DogImages[0].url}></img>
               </div>

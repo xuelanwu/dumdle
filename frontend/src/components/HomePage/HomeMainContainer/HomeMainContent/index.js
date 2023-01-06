@@ -12,6 +12,7 @@ const HomeMainContent = () => {
   const dispatch = useDispatch();
   const dog = useSelector((state) => state.session.profile);
   const newDog = useSelector((state) => state.friend.dog);
+  const friend = useSelector((state) => state.friend.friendship);
   const [page, setPage] = useState(1);
   const [errors, setErrors] = useState([]);
 
@@ -61,18 +62,23 @@ const HomeMainContent = () => {
 
   const handleLike = (e) => {
     e.preventDefault();
-    dispatch(likeFriend(dog.id, newDog.id)).catch(async (res) => {
-      const data = await res.json();
-      if (data && data.errors) setErrors(data.errors);
-    });
+    return dispatch(likeFriend(friend.id))
+      .then(() => dispatch(getDog(dog.id)))
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) setErrors(data.errors);
+      });
   };
 
   const handleBlock = (e) => {
     e.preventDefault();
-    dispatch(blockFriend(dog.id, newDog.id)).catch(async (res) => {
-      const data = await res.json();
-      if (data && data.errors) setErrors(data.errors);
-    });
+    console.log("*************** friend.id", friend);
+    return dispatch(blockFriend(friend.id))
+      .then(() => dispatch(getDog(dog.id)))
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) setErrors(data.errors);
+      });
   };
 
   if (!dog) return null;

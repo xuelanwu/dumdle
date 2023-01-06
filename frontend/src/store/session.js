@@ -115,7 +115,6 @@ export const editProfile = (dogInfo) => async (dispatch) => {
   if (response.ok) {
     const data = await response.json();
     dispatch(setProfile(data));
-
     return data;
   }
   return response;
@@ -181,7 +180,6 @@ const sessionReducer = (state = initialState, action) => {
     case REMOVE_PROFILE:
       newState = Object.assign({}, state);
       newState.profile = null;
-
       return newState;
     default:
       return state;
