@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getDog,
   likeFriend,
-  addFriend,
   blockFriend,
   getMatches,
   getPendings,
@@ -83,6 +82,7 @@ const HomeMainContent = () => {
     return dispatch(blockFriend(friend.id))
       .then(() => dispatch(getDog(dog.id)))
       .then(() => dispatch(getPendings(dog.id)))
+      .then(() => dispatch(getDog(dog.id)))
       .catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) setErrors(data.errors);

@@ -17,16 +17,20 @@ const HomeSideBarContent = () => {
 
   useEffect(() => {
     if (dog) {
-      dispatch(getMatches(dog.id)).catch(async (res) => {
-        const data = await res.json();
-        console.log(data);
-        if (data && data.errors) setErrors(data.errors);
-      });
-      dispatch(getPendings(dog.id)).catch(async (res) => {
-        const data = await res.json();
-        console.log(data);
-        if (data && data.errors) setErrors(data.errors);
-      });
+      dispatch(getMatches(dog.id))
+        .then(() => console.log(matches))
+        .catch(async (res) => {
+          const data = await res.json();
+          console.log(data);
+          if (data && data.errors) setErrors(data.errors);
+        });
+      dispatch(getPendings(dog.id))
+        .then(() => console.log(pendings))
+        .catch(async (res) => {
+          const data = await res.json();
+          console.log(data);
+          if (data && data.errors) setErrors(data.errors);
+        });
     } else {
       return history.push("/profile");
     }
