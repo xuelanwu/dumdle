@@ -83,7 +83,6 @@ export const blockFriend = (friendId) => async (dispatch) => {
   });
   if (response.ok) {
     const data = await response.json();
-    console.log("************** block reducer", data);
     dispatch(setFriendship(data));
     return data;
   }
