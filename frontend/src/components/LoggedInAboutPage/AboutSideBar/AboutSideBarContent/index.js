@@ -5,21 +5,17 @@ import LogoutModal from "../../../LogoutModal";
 
 import "./index.css";
 
-const ProfileSideBarContent = () => {
+const AboutSideBarContent = () => {
   const dog = useSelector((state) => state.session.profile);
   return (
     <div className="sidebar-content-container profile">
-      {dog ? <p>Edit profile</p> : <p>Create profile</p>}
-      <Link
-        to="/about"
-        className="about-link
-      "
-      >
-        <p>About</p>
+      <Link to="/profile" className="profile-link">
+        <p>Profile</p>
       </Link>
+      <p>About</p>
       <LogoutModal />
     </div>
   );
 };
 
-export default ProfileSideBarContent;
+export default AboutSideBarContent;

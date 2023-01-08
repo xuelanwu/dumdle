@@ -12,6 +12,7 @@ import SignupFormPage from "./components/SignupFormPage";
 import SplashPage from "./components/SplashPage";
 import HomePage from "./components/HomePage";
 import ProfileFormPage from "./components/ProfileFormPage";
+import LoggedInAboutPage from "./components/LoggedInAboutPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -49,6 +50,9 @@ function App() {
         </ProtectedRoute>
         <ProtectedRoute path="/profile">
           <ProfileFormPage />
+        </ProtectedRoute>
+        <ProtectedRoute path="/about">
+          <LoggedInAboutPage />
         </ProtectedRoute>
       </Switch>
     </>

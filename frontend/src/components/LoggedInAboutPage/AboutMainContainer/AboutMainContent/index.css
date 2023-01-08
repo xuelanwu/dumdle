@@ -1,0 +1,60 @@
+.main-content-container {
+  height: calc(100vh - 4.5rem);
+  overflow-y: scroll;
+}
+
+.about-container {
+  width: 46vw;
+  margin: auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+}
+
+.about-container h1 {
+  font-size: 2rem;
+  line-height: 1.2;
+  font-weight: 500;
+  margin: 0;
+  color: #454650;
+}
+
+.about-container h3 {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #454650;
+  margin: 0;
+}
+
+.about-container p {
+  color: #454650;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.about-logo-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  color: #ffc629;
+  font-size: 2rem;
+  padding-top: 3rem;
+}
+
+.about-logo-container p {
+  color: #ffc629;
+  font-size: 2rem;
+  margin: 0;
+  padding-top: 0.5rem;
+}
+
+.about-contact {
+  font-size: 0.8rem;
+  text-decoration: none;
+  color: #454650;
+  padding: 0;
+}
