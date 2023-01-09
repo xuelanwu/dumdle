@@ -16,7 +16,7 @@ router.get("/matches", requireAuth, async (req, res) => {
       status: "matched",
     },
   });
-  console.log("*********** friends matches", friends);
+
   if (friends.length > 0) {
     const matchIds = friends.map((friend) => {
       if (friend.dogId_1 === parseInt(dogId)) return friend.dogId_2;

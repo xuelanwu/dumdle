@@ -101,7 +101,7 @@ const SplashPage = ({ isLoaded }) => {
           href="https://www.linkedin.com/in/xuelan-wu-ba354a1b0/"
           className="about-contact splash-contact"
         >
-          <i class="fa-brands fa-linkedin fa-2xl"></i>
+          <i className="fa-brands fa-linkedin fa-2xl"></i>
         </a>
       </div>
     </>

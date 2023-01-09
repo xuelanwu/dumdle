@@ -66,7 +66,7 @@ const HomeSideBarContent = () => {
         </div>
       )}
       {!matches && !pendings && (
-        <div className="matches-container">
+        <div className="matches-container discover">
           <div className="matches-discover-container matches-discover-content">
             <div className="desktop-box">
               <i className="fa-solid fa-desktop fa-2xl"></i>

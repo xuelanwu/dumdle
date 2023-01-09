@@ -76,7 +76,7 @@ const HomeMainContent = () => {
 
   const handleBlock = (e) => {
     e.preventDefault();
-    console.log("*************** friend.id", friend);
+
     return dispatch(blockFriend(friend.id))
       .then(() => dispatch(getDog(dog.id)))
       .catch(async (res) => {

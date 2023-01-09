@@ -20,10 +20,13 @@
 }
 
 .matches-container {
-  height: calc(100vh - 4.5rem);
   width: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.matches-container.discover {
+  height: calc(100vh - 4.5rem);
 }
 
 .matches-block {
