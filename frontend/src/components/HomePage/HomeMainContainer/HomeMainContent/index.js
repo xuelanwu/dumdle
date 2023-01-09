@@ -22,7 +22,9 @@ const HomeMainContent = () => {
 
   useEffect(() => {
     setPage(1);
-  }, [dog]);
+    const card = document.querySelector(".home-content-block");
+    card.style.transform = `translateY(0vw)`;
+  }, [newDog]);
 
   const handleOnWheelCapture = (e) => {
     const scroll = e.deltaY;
