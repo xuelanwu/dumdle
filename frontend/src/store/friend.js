@@ -91,9 +91,10 @@ export const blockFriend = (friendId) => async (dispatch) => {
 
 export const getMatches = (dogId) => async (dispatch) => {
   const response = await csrfFetch(`api/friends/matches?dogId=${dogId}`);
-
+  console.log("********** matches response", response);
   if (response.ok) {
     const data = await response.json();
+    console.log();
     dispatch(setMatches(data));
     return data;
   }
@@ -132,17 +133,25 @@ const friendReducer = (state = initialState, action) => {
     case SET_MATCHES:
       newState = Object.assign({}, state);
       newState.matched = {};
-      action.matches.forEach((match) => {
-        newState.matched[match.id] = match;
-      });
+      if (action.matches) {
+        action.matches.forEach((match) => {
+          newState.matched[match.id] = match;
+        });
+      } else {
+        newState.matched = action.matches;
+      }
       return newState;
     case SET_PENDINGS:
       newState = Object.assign({}, state);
       newState.pending = {};
-      action.pendings.forEach((pending) => {
-        console.log("************** pending", pending);
-        newState.pending[pending.id] = pending;
-      });
+      if (action.pendings) {
+        action.pendings.forEach((pending) => {
+          console.log("************** pending", pending);
+          newState.pending[pending.id] = pending;
+        });
+      } else {
+        newState.pending = action.pendings;
+      }
       return newState;
     default:
       return state;

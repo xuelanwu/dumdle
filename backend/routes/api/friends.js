@@ -16,8 +16,8 @@ router.get("/matches", requireAuth, async (req, res) => {
       status: "matched",
     },
   });
-
-  if (friends) {
+  console.log("*********** friends matches", friends);
+  if (friends.length > 0) {
     const matchIds = friends.map((friend) => {
       if (friend.dogId_1 === parseInt(dogId)) return friend.dogId_2;
       else return friend.dogId_1;
@@ -52,7 +52,7 @@ router.get("/pending", requireAuth, async (req, res) => {
     },
   });
 
-  if (friends) {
+  if (friends.length > 0) {
     return res.json(friends);
   } else return res.json(null);
 });
