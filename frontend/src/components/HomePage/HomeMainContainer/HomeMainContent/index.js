@@ -32,33 +32,22 @@ const HomeMainContent = () => {
 
     if (scrolling) {
       setScrollDone(false);
-      if (page === 1) {
-        if (scroll > 50) {
-          const card = document.querySelector(".home-content-block");
-          card.style.transform = `translateY(-42vw)`;
+      const card = document.querySelector(".home-content-block");
+      if (scroll > 50) {
+        if (page < 4) {
+          card.style.transform = `translateY(-${42 * page}vw)`;
           setPage((prev) => prev + 1);
         }
-      } else if (page === 3) {
-        if (scroll < -50) {
-          const card = document.querySelector(".home-content-block");
-          card.style.transform = `translateY(-${42}vw)`;
-          setPage((prev) => prev - 1);
-        }
-      } else {
-        if (scroll > 50) {
-          const card = document.querySelector(".home-content-block");
-          card.style.transform = `translateY(-${42 * 2}vw)`;
-          setPage((prev) => prev + 1);
-        }
-        if (scroll < -50) {
-          const card = document.querySelector(".home-content-block");
-          card.style.transform = `translateY(0)`;
+      }
+      if (scroll < -50) {
+        if (page > 0) {
+          card.style.transform = `translateY(-${42 * (page - 1)}vw)`;
           setPage((prev) => prev - 1);
         }
       }
       setTimeout(() => {
         setScrollDone(true);
-      }, 500);
+      }, 300);
     }
   };
 
@@ -141,6 +130,25 @@ const HomeMainContent = () => {
             <div className="home-content-card">
               <div className="home-content-card-nonsplit">
                 <img src={newDog.DogImages && newDog.DogImages[1].url}></img>
+              </div>
+            </div>
+
+            <div className="home-content-card">
+              <div className="home-content-card-split left">
+                <img
+                  src={newDog.DogImages && newDog.DogImages[2].url}
+                  className="home-content-img"
+                ></img>
+              </div>
+              <div className="home-content-card-split right location">
+                <p>
+                  {" "}
+                  <span>
+                    <i className="fa-solid fa-location-dot fa-xs"></i>
+                  </span>
+                  {` ${newDog.name}'s location`}
+                </p>
+                <p className="home-content-breed">Boston, Massachusetts</p>
               </div>
             </div>
           </div>
