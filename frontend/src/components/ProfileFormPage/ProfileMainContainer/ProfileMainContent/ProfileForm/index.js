@@ -62,6 +62,10 @@ const ProfileForm = () => {
     }
   }, [dog]);
 
+  useEffect(() => {
+    if (previewImgArr.length <= 3) return setImgErrors([]);
+  }, [previewImgArr]);
+
   const openAgeMenu = (e) => {
     e.preventDefault();
     if (showAgeMenu) return;
@@ -149,7 +153,6 @@ const ProfileForm = () => {
   const handleDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
-
     if (e.dataTransfer.files.length + imgArr.length > 3) {
       return setImgErrors(["Please upload 3 images"]);
     } else if (e.dataTransfer.files.length > 0) {
