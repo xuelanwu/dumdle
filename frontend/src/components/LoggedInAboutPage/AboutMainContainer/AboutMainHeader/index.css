@@ -1,0 +1,24 @@
+.main-title-container {
+  width: 100%;
+  height: 4.5rem;
+  display: flex;
+  column-gap: 26vw;
+  justify-content: flex-end;
+  align-items: center;
+  border-bottom: 1px solid #dcdcdc;
+  padding-right: 2rem;
+}
+
+.main-title-block h3 {
+  font-size: 1.25rem;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.close-button {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: #767676;
+  cursor: pointer;
+}
