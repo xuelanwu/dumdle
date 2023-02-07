@@ -11,6 +11,11 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Friend.belongsTo(models.Dog, { foreignKey: "dogId_1" });
       Friend.belongsTo(models.Dog, { foreignKey: "dogId_2" });
+      Friend.hasMany(models.DirectMessage, {
+        foreignKey: "friendId",
+        onDelete: "CASCADE",
+        hooks: true,
+      });
     }
   }
   Friend.init(
