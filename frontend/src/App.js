@@ -13,6 +13,7 @@ import SplashPage from "./components/SplashPage";
 import HomePage from "./components/HomePage";
 import ProfileFormPage from "./components/ProfileFormPage";
 import LoggedInAboutPage from "./components/LoggedInAboutPage";
+import ChatPage from "./components/ChatPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -53,6 +54,9 @@ function App() {
         </ProtectedRoute>
         <ProtectedRoute path="/about">
           <LoggedInAboutPage />
+        </ProtectedRoute>
+        <ProtectedRoute path="/chat">
+          <ChatPage />
         </ProtectedRoute>
       </Switch>
     </>
