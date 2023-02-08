@@ -3,11 +3,10 @@ import { Redirect, useHistory } from "react-router-dom";
 
 import { getDog } from "../../store/friend";
 
-import HomeSideBar from "./HomeSideBar";
+import HomeSideBar from "../HomeSideBar";
 import HomeMainContainer from "./HomeMainContainer";
 import { useEffect, useState } from "react";
 import { getProfile } from "../../store/session";
-import { SDK_VERSION } from "firebase/app";
 
 const HomePage = () => {
   const dispatch = useDispatch();

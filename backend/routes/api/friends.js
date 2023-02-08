@@ -18,21 +18,23 @@ router.get("/matches", requireAuth, async (req, res) => {
   });
 
   if (friends.length > 0) {
-    const matchIds = friends.map((friend) => {
-      if (friend.dogId_1 === parseInt(dogId)) return friend.dogId_2;
-      else return friend.dogId_1;
+    const friendList = friends.map((friend) => {
+      if (friend.dogId_1 === parseInt(dogId)) {
+        return { friendId: friend.id, dog: friend.dogId_2 };
+      } else {
+        return { friendId: friend.id, dog: friend.dogId_1 };
+      }
     });
-    const matches = await Dog.findAll({
-      where: {
-        id: { [Op.in]: matchIds },
-      },
-      include: {
-        model: DogImage,
-      },
-    });
-    if (matches) {
-      return res.json(matches);
-    } else return res.json(null);
+
+    for (const friend of friendList) {
+      const dog = await Dog.findByPk(friend.dog, {
+        include: {
+          model: DogImage,
+        },
+      });
+      friend.dog = dog;
+    }
+    return res.json(friendList);
   } else return res.json(null);
 });
 
@@ -57,7 +59,7 @@ router.get("/pending", requireAuth, async (req, res) => {
   } else return res.json(null);
 });
 
-router.get("/", requireAuth, async (req, res) => {
+router.get("/new", requireAuth, async (req, res) => {
   const userId = req.user.id;
 
   const { dogId } = req.query;

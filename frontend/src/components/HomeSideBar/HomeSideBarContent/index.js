@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getMatches, getPendings } from "../../../../store/friend";
-import { getProfile } from "../../../../store/session";
+import { getMatches, getPendings } from "../../../store/friend";
+import { getProfile } from "../../../store/session";
 import { useHistory } from "react-router-dom";
 
 import "./index.css";
@@ -32,6 +32,11 @@ const HomeSideBarContent = () => {
     }
   }, [dog]);
 
+  const handleClick = (e) => {
+    e.preventDefault();
+    console.log(e.currentTarget.value);
+  };
+
   if (!dog) return null;
 
   return (
@@ -56,12 +61,18 @@ const HomeSideBarContent = () => {
         <div className="matches-container">
           <h1>Matches</h1>
           {Object.values(matches).map((matchedDog) => (
-            <div className="matches-block" key={`match-${matchedDog.id}`}>
-              <div className="sidebar-avatar-block matches-box avatar">
-                <img src={matchedDog.DogImages[0].url}></img>
-              </div>
-              <div className="matches-box name">{matchedDog.name}</div>
-            </div>
+            <button
+              className="matches-block"
+              key={`match-${matchedDog.dog.id}`}
+              value={matchedDog.friendId}
+              onClick={handleClick}
+            >
+              <img
+                className="matches-box avatar"
+                src={matchedDog.dog.DogImages[0].url}
+              ></img>
+              <p className="matches-box name">{matchedDog.dog.name}</p>
+            </button>
           ))}
         </div>
       )}
