@@ -35,13 +35,16 @@
   align-items: center;
   gap: 1rem;
   padding: 0.5rem 1.5rem;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
 }
 
 .matches-block:hover {
   background-color: rgba(0, 0, 0, 0.02);
 }
 
-.matches-box.avatar img {
+.matches-box.avatar {
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -59,6 +62,7 @@
   font-size: 1rem;
   line-height: 1.5;
   font-weight: 600;
+  padding: 0;
 }
 
 .matches-discover-container {

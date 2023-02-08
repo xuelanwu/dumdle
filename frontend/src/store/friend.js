@@ -35,7 +35,7 @@ const setPendings = (pendings) => {
 };
 
 export const getDog = (dogId) => async (dispatch) => {
-  const response = await csrfFetch(`/api/friends?dogId=${dogId}`);
+  const response = await csrfFetch(`/api/friends/new?dogId=${dogId}`);
 
   if (response.ok) {
     const data = await response.json();
@@ -128,7 +128,7 @@ const friendReducer = (state = initialState, action) => {
       newState.matched = {};
       if (action.matches) {
         action.matches.forEach((match) => {
-          newState.matched[match.id] = match;
+          newState.matched[match.friendId] = match;
         });
       } else {
         newState.matched = action.matches;
