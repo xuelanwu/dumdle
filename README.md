@@ -1,6 +1,6 @@
 ## About
 
-[Dumdle][1] is a web-application clone inspired by [Bumble][2], that allows dog owners to match, chat, and meet other dogs and their owners. 
+[Dumdle][1] is a web-application clone inspired by [Bumble][2], a platform that connects dog owners with other dog owners based on their shared interests and lifestyles. The app allows users to create profiles for their dogs and search for other dogs in their area that would be compatible playdates or long-term companions. The app also includes features such as messaging and chat. The goal of Dumdle is to help dog owners find compatible dogs for their furry friends to interact and socialize with, and to promote responsible dog ownership by encouraging dog owners to connect and build communities.
 
 [1]: https://dumdle.herokuapp.com
 [2]: https://www.bumble.com
