@@ -6,10 +6,30 @@ const csurf = require("csurf");
 const helmet = require("helmet");
 const cookieParser = require("cookie-parser");
 
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+
 const { environment } = require("./config");
 const isProduction = environment === "production";
 
 const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  /* options */
+});
+
+io.on("connection", (socket) => {
+  // console.log("********* socket.id => ", socket.id);
+  socket.on("message", (message, room) => {
+    console.log(room);
+    if (room) socket.to(room).emit("message", message);
+    // console.log("************** arg => ", arg);
+  });
+  socket.on("join", (room) => {
+    console.log("################## join", room);
+    socket.join(room);
+  });
+});
 
 app.use(morgan("dev"));
 
@@ -76,4 +96,4 @@ app.use((err, _req, res, _next) => {
   });
 });
 
-module.exports = app;
+module.exports = { app, httpServer };

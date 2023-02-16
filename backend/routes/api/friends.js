@@ -59,6 +59,29 @@ router.get("/pending", requireAuth, async (req, res) => {
   } else return res.json(null);
 });
 
+router.get("/", requireAuth, async (req, res) => {
+  const { friendId } = req.query;
+
+  const friend = await Friend.findByPk(friendId);
+
+  if (friend) {
+    const userId = req.user.id;
+    const dog = await Dog.findOne({
+      where: { ownerId: userId },
+    });
+    if (dog) {
+      const friendDogId =
+        friend.dogId_1 === dog.id ? friend.dogId_2 : friend.dogId_1;
+      const friendDog = await Dog.findByPk(friendDogId, {
+        include: {
+          model: DogImage,
+        },
+      });
+      return res.json({ friendId, dog: friendDog });
+    }
+  } else return res.json(null);
+});
+
 router.get("/new", requireAuth, async (req, res) => {
   const userId = req.user.id;
 
