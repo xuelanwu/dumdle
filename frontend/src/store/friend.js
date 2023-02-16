@@ -84,7 +84,7 @@ export const blockFriend = (friendId) => async (dispatch) => {
 };
 
 export const getMatches = (dogId) => async (dispatch) => {
-  const response = await csrfFetch(`api/friends/matches?dogId=${dogId}`);
+  const response = await csrfFetch(`/api/friends/matches?dogId=${dogId}`);
 
   if (response.ok) {
     const data = await response.json();
@@ -95,7 +95,7 @@ export const getMatches = (dogId) => async (dispatch) => {
 };
 
 export const getPendings = (dogId) => async (dispatch) => {
-  const response = await csrfFetch(`api/friends/pending?dogId=${dogId}`);
+  const response = await csrfFetch(`/api/friends/pending?dogId=${dogId}`);
 
   if (response.ok) {
     const data = await response.json();

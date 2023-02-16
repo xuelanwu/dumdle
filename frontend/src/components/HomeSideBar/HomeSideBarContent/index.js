@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getMatches, getPendings } from "../../../store/friend";
+import { getFriendship, getMatches, getPendings } from "../../../store/friend";
 import { getProfile } from "../../../store/session";
 import { useHistory } from "react-router-dom";
 
@@ -34,7 +34,15 @@ const HomeSideBarContent = () => {
 
   const handleClick = (e) => {
     e.preventDefault();
-    console.log(e.currentTarget.value);
+    const room = e.currentTarget.value;
+    history.push(`/chat/${room}`);
+    // return dispatch(getFriendship(room))
+    //   .then(() => history.push(`/chat/${room}`))
+    //   .catch(async (res) => {
+    //     const data = await res.json();
+    //     console.log(data);
+    //     if (data && data.errors) setErrors(data.errors);
+    //   });
   };
 
   if (!dog) return null;

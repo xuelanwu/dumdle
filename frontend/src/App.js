@@ -55,7 +55,7 @@ function App() {
         <ProtectedRoute path="/about">
           <LoggedInAboutPage />
         </ProtectedRoute>
-        <ProtectedRoute path="/chat">
+        <ProtectedRoute path="/chat/:room">
           <ChatPage />
         </ProtectedRoute>
       </Switch>

@@ -19,6 +19,7 @@ router.get("/", requireAuth, async (req, res, next) => {
   const DMs = await DirectMessage.findAll({
     where: friendId,
     order: ["createdAt"],
+    attributes: ["id", "friendId", "senderId", "message", "createdAt"],
   });
 
   if (DMs.length > 0) return res.json(DMs);
