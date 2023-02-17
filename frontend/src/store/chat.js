@@ -3,6 +3,7 @@ import { csrfFetch } from "./csrf";
 
 const SET_CHAT = "chat/setChat";
 const SET_FRIEND = "chat/setFriend";
+const ADD_MESSAGE = "chat/addMessage";
 
 const setChat = (chats) => {
   return {
@@ -15,6 +16,13 @@ const setFriend = (friendship) => {
   return {
     type: SET_FRIEND,
     friendship,
+  };
+};
+
+const addMessage = (message) => {
+  return {
+    type: ADD_MESSAGE,
+    message,
   };
 };
 
@@ -50,6 +58,9 @@ export const sendMessage =
     if (response.ok) {
       const data = await response.json();
       console.log("************ data", data);
+      const { id, friendId, senderId, message, createdAt } = data;
+      dispatch(addMessage({ id, friendId, senderId, message, createdAt }));
+      return data;
     }
     return response;
   };
@@ -76,6 +87,13 @@ const chatReducer = (state = initialState, action) => {
     case SET_FRIEND:
       newState = Object.assign({}, state);
       newState.friend = action.friendship;
+      return newState;
+    case ADD_MESSAGE:
+      newState = { ...state, chats: { ...state.chats } };
+      newState.chats[action.message.id] = action.message;
+      console.log("***************** state old", state);
+      console.log("*********** states", state === newState);
+      console.log("***************** state new", newState);
       return newState;
     default:
       return state;

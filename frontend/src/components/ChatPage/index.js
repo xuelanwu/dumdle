@@ -18,9 +18,8 @@ const ChatPage = () => {
   const user = useSelector((state) => state.session.user);
   const dog = useSelector((state) => state.session.profile);
   const friend = useSelector((state) => state.chat.friend);
+  const chats = useSelector((state) => state.chat.chats);
   const { room } = useParams();
-
-  console.log("************** friend", friend);
 
   const [messages, setMessages] = useState([]);
   const [errors, setErrors] = useState([]);
@@ -37,19 +36,33 @@ const ChatPage = () => {
       if (data && data.errors) setErrors(data.errors);
     });
     dispatch(getChats(room))
-      .then((data) => setMessages(data))
+      .then((data) => {
+        setMessages(data);
+      })
       .catch(async (res) => {
         const data = await res.json(res);
         console.log(data);
         if (data && data.errors) setErrors(data.errors);
       });
-    socket.emit("join", room);
+    socket.emit("login", dog.id);
     console.log("---------------- join", room);
     socket.on("message", (arg) => {
       console.log("***************** message => ", arg);
       setMessages((messages) => [...messages, arg]);
     });
   }, [dispatch]);
+
+  useEffect(() => {
+    if (chats) {
+      const msgArr = Object.values(chats);
+      setMessages(msgArr);
+    }
+  }, [chats]);
+
+  // useEffect(() => {
+  //   return setMessages((messages) => [...messages, ...chats]);
+  // }, [chats]);
+
   // useEffect(() => {
   //   dispatch(getProfile(user.id))
   //     .then((dog) => {

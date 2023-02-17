@@ -25,8 +25,7 @@ const ChatContainer = ({
   };
 
   const handleSendMessage = () => {
-    console.log("------------- msg", message);
-    dispatch(sendMessage(friend.dog.id, dog.id, message)).catch(async (res) => {
+    dispatch(sendMessage(room, dog.id, message)).catch(async (res) => {
       const data = await res.json(res);
       console.log(data);
       if (data && data.errors) setErrors(data.errors);
@@ -41,8 +40,7 @@ const ChatContainer = ({
     e.prevent.default();
     history.push("/home");
   };
-  console.log("************* friend", friend);
-  console.log("************** msgs", messages);
+
   return (
     <div className="main-container chat">
       <div className="main-title-container chat">
@@ -63,13 +61,12 @@ const ChatContainer = ({
           messages.length > 0 &&
           messages.map((msg, idx) => (
             <div
+              key={`msg-${idx}`}
               className={`message-block  ${
                 msg.senderId === friend.dog.id ? "received" : "sent"
               }`}
             >
-              <p className={`message-box`} key={idx}>
-                {msg.message}
-              </p>
+              <p className={`message-box`}>{msg.message}</p>
             </div>
           ))}
       </div>
