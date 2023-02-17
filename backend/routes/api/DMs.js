@@ -7,9 +7,7 @@ const router = express.Router();
 
 router.post("/", requireAuth, async (req, res, next) => {
   const { friendId, senderId, message } = req.body;
-
   const DM = await DirectMessage.create({ friendId, senderId, message });
-
   return res.json(DM);
 });
 

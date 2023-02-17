@@ -12,6 +12,7 @@
 .message-container {
   height: calc(100vh - 4.5rem - 4rem);
   padding: 1.25rem;
+  overflow-y: scroll;
 }
 
 .message-block {
