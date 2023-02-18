@@ -20,23 +20,21 @@ const io = new Server(httpServer, {
 
 let users = {};
 io.on("connection", (socket) => {
-  // console.log("********* socket.id => ", socket.id);
   socket.on("login", (dogId) => {
     users[dogId] = socket.id;
     socket.emit("online", dogId);
-    console.log("-------------------- login socket id", socket.id);
-    console.log("-------------------- login dogId", dogId);
+    // console.log("-------------------- login socket id", socket.id);
+    // console.log("-------------------- login dogId", dogId);
   });
   socket.on("message", (message) => {
-    console.log("-------------------- message msg", message);
-    console.log(
-      "-------------------- message recipientId",
-      message.recipientId
-    );
+    // console.log("-------------------- message msg", message);
+    // console.log(
+    //   "-------------------- message recipientId",
+    //   message.recipientId
+    // );
     const recipient = users[message.recipientId];
-    console.log("------------------- message recipient", recipient);
+    // console.log("------------------- message recipient", recipient);
     if (recipient) socket.to(recipient).emit("message", message);
-    // console.log("************** arg => ", arg);
   });
 });
 
