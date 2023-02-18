@@ -11,14 +11,18 @@
 
 .message-container {
   height: calc(100vh - 4.5rem - 4rem);
-  padding: 1.25rem;
-  overflow-y: scroll;
+}
+
+.scroll-wrapper {
+  width: 100%;
+  height: 100%;
 }
 
 .message-block {
   width: 100%;
   display: flex;
-  padding-bottom: 0.5rem;
+  padding: 0 1.25rem;
+  padding-bottom: 0.8rem;
 }
 
 .message-block.sent {
@@ -26,9 +30,9 @@
 }
 
 .message-box {
-  width: 55%;
+  max-width: 55%;
   margin: 0;
-  padding: 0.5rem 1rem;
+  padding: 0.8rem 1rem;
   background-color: #ffc629;
   color: #282828;
   border-radius: 1rem;
@@ -70,8 +74,10 @@
 
 .grey-send-button {
   background-color: #dcdcdc;
+  cursor: not-allowed;
 }
 
 .highlight-send-button {
   background-color: #ffc629;
+  cursor: pointer;
 }

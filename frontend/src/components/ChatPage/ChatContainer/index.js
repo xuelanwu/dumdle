@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
+import ScrollToBottom from "react-scroll-to-bottom";
+
 import { sendMessage } from "../../../store/chat";
 
 import "./index.css";
@@ -25,12 +27,17 @@ const ChatContainer = ({
   };
 
   const handleSendMessage = () => {
-    dispatch(sendMessage(room, dog.id, message)).catch(async (res) => {
-      const data = await res.json(res);
-      console.log(data);
-      if (data && data.errors) setErrors(data.errors);
-    });
-    // socket.emit("message", message, room);
+    if (!message) return;
+    const msgObj = { message, senderId: dog.id, recipientId: friend.dog.id };
+    socket.emit("message", msgObj);
+
+    return dispatch(sendMessage(room, dog.id, message))
+      .then(() => setMessage(""))
+      .catch(async (res) => {
+        const data = await res.json(res);
+        console.log(data);
+        if (data && data.errors) setErrors(data.errors);
+      });
   };
 
   // const handleLeave = () => {
@@ -57,18 +64,20 @@ const ChatContainer = ({
         </div>
       </div>
       <div className="message-container">
-        {messages &&
-          messages.length > 0 &&
-          messages.map((msg, idx) => (
-            <div
-              key={`msg-${idx}`}
-              className={`message-block  ${
-                msg.senderId === friend.dog.id ? "received" : "sent"
-              }`}
-            >
-              <p className={`message-box`}>{msg.message}</p>
-            </div>
-          ))}
+        <ScrollToBottom className="scroll-wrapper">
+          {messages &&
+            messages.length > 0 &&
+            messages.map((msg, idx) => (
+              <div
+                key={`msg-${idx}`}
+                className={`message-block  ${
+                  msg.senderId === friend.dog.id ? "received" : "sent"
+                }`}
+              >
+                <p className={`message-box`}>{msg.message}</p>
+              </div>
+            ))}
+        </ScrollToBottom>
       </div>
       <div className="input-container">
         <div className="input-block">

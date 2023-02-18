@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, useHistory, useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
-// import { v4 as uuidv4 } from "uuid";
+
 import { useSocket } from "../../context/Socket";
 
 import { getProfile } from "../../store/session";
@@ -44,13 +44,23 @@ const ChatPage = () => {
         console.log(data);
         if (data && data.errors) setErrors(data.errors);
       });
-    socket.emit("login", dog.id);
-    console.log("---------------- join", room);
+
+    if (dog) socket.emit("login", dog.id);
+  }, [dispatch, dog, room]);
+
+  useEffect(() => {
     socket.on("message", (arg) => {
-      console.log("***************** message => ", arg);
-      setMessages((messages) => [...messages, arg]);
+      dispatch(getChats(room))
+        .then((data) => {
+          setMessages(data);
+        })
+        .catch(async (res) => {
+          const data = await res.json(res);
+          console.log(data);
+          if (data && data.errors) setErrors(data.errors);
+        });
     });
-  }, [dispatch]);
+  }, [socket]);
 
   useEffect(() => {
     if (chats) {

@@ -42,7 +42,6 @@ export const getFriend = (friendId) => async (dispatch) => {
 
   if (response.ok) {
     const data = await response.json();
-    console.log("************ data", data);
     dispatch(setFriend(data));
     return data;
   }
@@ -57,7 +56,6 @@ export const sendMessage =
     });
     if (response.ok) {
       const data = await response.json();
-      console.log("************ data", data);
       const { id, friendId, senderId, message, createdAt } = data;
       dispatch(addMessage({ id, friendId, senderId, message, createdAt }));
       return data;
@@ -91,9 +89,6 @@ const chatReducer = (state = initialState, action) => {
     case ADD_MESSAGE:
       newState = { ...state, chats: { ...state.chats } };
       newState.chats[action.message.id] = action.message;
-      console.log("***************** state old", state);
-      console.log("*********** states", state === newState);
-      console.log("***************** state new", newState);
       return newState;
     default:
       return state;
