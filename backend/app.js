@@ -18,16 +18,25 @@ const io = new Server(httpServer, {
   /* options */
 });
 
+let users = {};
 io.on("connection", (socket) => {
   // console.log("********* socket.id => ", socket.id);
-  socket.on("message", (message, room) => {
-    console.log(room);
-    if (room) socket.to(room).emit("message", message);
-    // console.log("************** arg => ", arg);
+  socket.on("login", (dogId) => {
+    users[dogId] = socket.id;
+    socket.emit("online", dogId);
+    console.log("-------------------- login socket id", socket.id);
+    console.log("-------------------- login dogId", dogId);
   });
-  socket.on("join", (room) => {
-    console.log("################## join", room);
-    socket.join(room);
+  socket.on("message", (message) => {
+    console.log("-------------------- message msg", message);
+    console.log(
+      "-------------------- message recipientId",
+      message.recipientId
+    );
+    const recipient = users[message.recipientId];
+    console.log("------------------- message recipient", recipient);
+    if (recipient) socket.to(recipient).emit("message", message);
+    // console.log("************** arg => ", arg);
   });
 });
 
