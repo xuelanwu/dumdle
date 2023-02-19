@@ -31,7 +31,22 @@ module.exports = {
           content: "swimming",
         },
         {
-          content: "walks",
+          content: "cuddle",
+        },
+        {
+          content: "bark",
+        },
+        {
+          content: "treats",
+        },
+        {
+          content: "agility",
+        },
+        {
+          content: "human",
+        },
+        {
+          content: "running",
         },
       ],
       {}

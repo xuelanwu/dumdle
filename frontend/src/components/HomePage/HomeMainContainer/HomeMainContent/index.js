@@ -123,6 +123,13 @@ const HomeMainContent = () => {
                   <p className="home-content-description">
                     {newDog.description}
                   </p>
+                  <div className="home-content-tag-block">
+                    {console.log("********* home tags", newDog.Tags)}
+                    {newDog.Tags.length > 0 &&
+                      newDog.Tags.map((tag, i) => (
+                        <div className="home-content-tag-box">{`# ${tag.content}`}</div>
+                      ))}
+                  </div>
                 </div>
               </div>
             </div>
