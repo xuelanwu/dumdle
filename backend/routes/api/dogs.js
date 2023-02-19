@@ -1,7 +1,7 @@
 const express = require("express");
 
 const { requireAuth } = require("../../utils/auth");
-const { Dog, DogImage } = require("../../db/models");
+const { Dog, DogImage, Tag } = require("../../db/models");
 
 // const { Sequelize, Op } = require("sequelize");
 
@@ -29,6 +29,9 @@ router.get("/", requireAuth, async (req, res, next) => {
     include: [
       {
         model: DogImage,
+      },
+      {
+        model: Tag,
       },
     ],
   });
@@ -167,6 +170,77 @@ router.delete("/images", requireAuth, async (req, res, next) => {
     message: `Successfully deleted spotImageId:${imageId}`,
     statusCode: 200,
   });
+});
+
+router.post("/tags", requireAuth, async (req, res, next) => {
+  const userId = req.user.id;
+  const { dogId, tags } = req.body;
+
+  const dog = await Dog.findByPk(dogId);
+
+  if (!dog) {
+    const err = new Error("Not Found");
+    err.title = "Not Found";
+    err.errors = ["Not Found"];
+    err.status = 404;
+    return next(err);
+  }
+
+  if (userId === dog.dataValues.ownerId) {
+    for (const t of tags) {
+      const tag = await Tag.findOne({
+        where: { content: t },
+      });
+      if (tag) {
+        await dog.addTag(tag);
+      } else {
+        const newTag = await Tag.create({ content: t });
+        await dog.addTag(newTag);
+      }
+    }
+    const updatedDog = await Dog.findByPk(dogId, { include: Tag });
+    return res.json(updatedDog);
+  } else {
+    const err = new Error("Unauthorized");
+    err.title = "Unauthorized";
+    err.errors = ["Unauthorized"];
+    err.status = 403;
+    return next(err);
+  }
+});
+
+router.put("/tags", requireAuth, async (req, res, next) => {
+  const userId = req.user.id;
+  const { dogId, tags } = req.body;
+
+  const dog = await Dog.findByPk(dogId);
+
+  if (!dog) {
+    const err = new Error("Not Found");
+    err.title = "Not Found";
+    err.errors = ["Not Found"];
+    err.status = 404;
+    return next(err);
+  }
+
+  if (userId === dog.dataValues.ownerId) {
+    for (const t of tags) {
+      const tag = await Tag.findOne({
+        where: { content: t },
+      });
+      if (tag) {
+        await dog.removeTag(tag);
+      }
+    }
+    const updatedDog = await Dog.findByPk(dogId, { include: Tag });
+    return res.json(updatedDog);
+  } else {
+    const err = new Error("Unauthorized");
+    err.title = "Unauthorized";
+    err.errors = ["Unauthorized"];
+    err.status = 403;
+    return next(err);
+  }
 });
 
 module.exports = router;
