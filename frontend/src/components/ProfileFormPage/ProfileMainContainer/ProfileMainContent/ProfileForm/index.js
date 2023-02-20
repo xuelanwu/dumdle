@@ -191,7 +191,6 @@ const ProfileForm = () => {
   };
 
   const handleImageDelete = (e, n) => {
-    console.log("*************** img delete");
     e.preventDefault();
     e.stopPropagation();
     const images = [...imgArr];

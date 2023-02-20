@@ -26,9 +26,6 @@ const ChatPage = () => {
 
   const socket = useSocket();
 
-  // socket.on("connect", () => {
-  //   console.log("****************** id => ", socket.id);
-  // });
   useEffect(() => {
     dispatch(getFriend(room)).catch(async (res) => {
       const data = await res.json(res);
