@@ -113,6 +113,12 @@ const ProfileForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (user.id === 1 || user.id === 2) {
+      setErrors(["Demo user cannot be modified!"]);
+      return;
+    }
+
     const dogInfo = { name, age, gender, size, breed, description };
 
     if (imgArr.length !== 3) return setErrors(["Please upload 3 images"]);
@@ -148,6 +154,10 @@ const ProfileForm = () => {
 
   const handleDelete = (e) => {
     e.preventDefault();
+    if (user.id === 1 || user.id === 2) {
+      setErrors(["Demo user cannot be modified!"]);
+      return;
+    }
     if (dog && user.id === dog.ownerId) {
       return dispatch(deleteProfile({ dogId: dog.id })).catch(async (res) => {
         const data = await res.json();
