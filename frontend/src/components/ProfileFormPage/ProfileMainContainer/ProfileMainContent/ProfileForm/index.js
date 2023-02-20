@@ -7,6 +7,8 @@ import {
   deleteProfile,
   editProfile,
   addImages,
+  addTags,
+  removeTags,
 } from "../../../../../store/session";
 // import { addImages } from "../../../../store/image";
 
@@ -20,15 +22,19 @@ const ProfileForm = () => {
   const user = useSelector((state) => state.session.user);
   const dog = useSelector((state) => state.session.profile);
 
-  const [imgArr, setImgArr] = useState([]);
-  const [previewImgArr, setPreviewImgArr] = useState([]);
-
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
   const [size, setSize] = useState("");
   const [breed, setBreed] = useState("");
   const [description, setDescription] = useState("");
+
+  const [imgArr, setImgArr] = useState([]);
+  const [previewImgArr, setPreviewImgArr] = useState([]);
+
+  const [tags, setTags] = useState([]);
+  const [newTags, setNewTags] = useState([]);
+  const [removedTags, setRemovedTags] = useState([]);
 
   const [errors, setErrors] = useState([]);
   const [imgErrors, setImgErrors] = useState([]);
@@ -38,11 +44,16 @@ const ProfileForm = () => {
 
   useEffect(() => {
     if (dog) {
-      const { name, age, gender, size, breed, description, DogImages } = dog;
+      const { name, age, gender, size, breed, description, DogImages, Tags } =
+        dog;
       if (DogImages) {
-        const urls = Object.values(DogImages).map((imgObj) => imgObj.url);
+        const urls = DogImages.map((imgObj) => imgObj.url);
         setImgArr([...urls]);
         setPreviewImgArr([...urls]);
+      }
+      if (Tags) {
+        const content = Tags.map((tagObj) => tagObj.content);
+        setTags([...content]);
       }
       setName(name);
       setAge(age);
@@ -124,6 +135,10 @@ const ProfileForm = () => {
         : createProfile(dogInfo)
     )
       .then((dog) => dispatch(addImages(dog.id, imgArr)))
+      .then((dogId) => {
+        if (newTags.length > 0) dispatch(addTags(dogId, newTags));
+        if (removedTags.length > 0) dispatch(removeTags(dogId, removedTags));
+      })
       .then(() => history.push("/home"))
       .catch(async (res) => {
         const data = await res.json();
@@ -163,6 +178,7 @@ const ProfileForm = () => {
   };
 
   const handleImageDelete = (e, n) => {
+    console.log("*************** img delete");
     e.preventDefault();
     e.stopPropagation();
     const images = [...imgArr];
@@ -175,7 +191,6 @@ const ProfileForm = () => {
 
   const handleImageChange = (e) => {
     e.stopPropagation();
-
     if (e.target.files.length + imgArr.length > 3) {
       return setImgErrors(["Please upload 3 images"]);
     } else if (e.target.files.length > 0) {
@@ -186,6 +201,27 @@ const ProfileForm = () => {
         setPreviewImgArr((prev) => [...prev, previewImg]);
       }
     }
+  };
+
+  const handleEnter = (e) => {
+    e.stopPropagation();
+    if (e.key !== "Enter") return;
+    const newTag = e.target.value;
+    if (!newTag.trim()) return;
+    e.preventDefault();
+    setTags([...tags, newTag]);
+    setNewTags([...newTags, newTag]);
+    setRemovedTags(removedTags.filter((ele) => ele !== newTag));
+    console.log("********* e", e.target.value);
+    e.target.value = null;
+  };
+
+  const handleDeleteTag = (e, tag) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setTags(tags.filter((ele) => ele !== tag));
+    setNewTags(newTags.filter((ele) => ele !== tag));
+    setRemovedTags([...removedTags, tag]);
   };
 
   return (
@@ -215,6 +251,7 @@ const ProfileForm = () => {
                     <img className="profile-img" src={previewImgArr[n]}></img>
                     {/* <div className="profile-img-cross-button"> */}
                     <button
+                      type="button"
                       className="profile-img-cross-button"
                       onClick={(e) => handleImageDelete(e, n)}
                       value={n}
@@ -264,6 +301,7 @@ const ProfileForm = () => {
         <div className="profile-dropdown">
           {age === "" ? (
             <button
+              type="button"
               className="profile-input select-button age default"
               onClick={openAgeMenu}
             >
@@ -274,6 +312,7 @@ const ProfileForm = () => {
             </button>
           ) : (
             <button
+              type="button"
               className="profile-input select-button age"
               onClick={openAgeMenu}
             >
@@ -296,6 +335,7 @@ const ProfileForm = () => {
               <div className="profile-dropdown-menu-inner">
                 {AGE.map((ele) => (
                   <button
+                    type="button"
                     key={ele}
                     value={ele}
                     onClick={() => setAge(ele)}
@@ -398,6 +438,7 @@ const ProfileForm = () => {
         <div className="profile-dropdown">
           {size === "" ? (
             <button
+              type="button"
               className="profile-input select-button size default"
               onClick={openSizeMenu}
             >
@@ -408,6 +449,7 @@ const ProfileForm = () => {
             </button>
           ) : (
             <button
+              type="button"
               className="profile-input select-button size"
               onClick={openSizeMenu}
             >
@@ -432,6 +474,7 @@ const ProfileForm = () => {
               <div className="profile-dropdown-menu-inner size">
                 {SIZE.map((ele) => (
                   <button
+                    type="button"
                     key={ele}
                     value={ele}
                     onClick={(e) => setSize(e.target.value)}
@@ -469,14 +512,47 @@ const ProfileForm = () => {
         ></textarea>
       </div>
 
-      <ul>
-        {errors.length > 0 &&
-          errors.map((error, idx) => <li key={idx}>{error}</li>)}
-      </ul>
+      <div className="profile-form-block">
+        <label className="profile-label">
+          <span>Passions or Personality</span>
+        </label>
+        <div className="profile-input tag-container">
+          {tags.map((tag, idx) => (
+            <div className="profile-tag-box" key={`profile-tag-${idx}`}>
+              <div className="tag">{tag}</div>
+              <button
+                type="button"
+                className="delete-tag"
+                onClick={(e) => handleDeleteTag(e, tag)}
+              >
+                &times;
+              </button>
+            </div>
+          ))}
+          <input
+            type="text"
+            placeholder="Add a tag"
+            className="profile-tag-input"
+            onKeyDown={handleEnter}
+          />
+        </div>
+      </div>
+
+      {errors.length > 0 && (
+        <ul>
+          {errors.map((error, idx) => (
+            <li key={idx}>{error}</li>
+          ))}
+        </ul>
+      )}
 
       {dog && (
         <div className="profile-form-block profile-input profile-delete-block">
-          <button className="profile-delete-button" onClick={handleDelete}>
+          <button
+            type="button"
+            className="profile-delete-button"
+            onClick={handleDelete}
+          >
             Delete
           </button>
         </div>
