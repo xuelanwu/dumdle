@@ -24,7 +24,7 @@ module.exports = {
         {
           friendId: 1,
           senderId: 1,
-          message: "How are you?",
+          message: "Woof! Woof!",
         },
         {
           friendId: 1,

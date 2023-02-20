@@ -42,8 +42,7 @@ module.exports = {
           gender: "female",
           size: "large",
           breed: "Border Collie",
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc nisi risus, auctor rutrum dui in, faucibus vulputate est. Donec in diam a dui condimentum vestibulum a et arcu.",
+          description: "I am 28 in human years.",
         },
         {
           ownerId: 4,
@@ -53,7 +52,7 @@ module.exports = {
           size: "medium",
           breed: "Corgi",
           description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+            "I like dogs. Cats too. Kids. Bleh. No kids. They stressed me out.",
         },
         {
           ownerId: 5,
@@ -63,7 +62,7 @@ module.exports = {
           size: "small",
           breed: "Golden Retriever",
           description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Pellentesque massa placerat duis ultricies lacus sed.",
+            "I like long walks on the beach...but the neighborhood at your house will do just fine.",
         },
         {
           ownerId: 6,
@@ -73,7 +72,7 @@ module.exports = {
           size: "giant",
           breed: "German Shepherd",
           description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Pellentesque massa placerat duis ultricies lacus sed.",
+            "I'm so full of love that my mom says I'd be a great therapy dog.",
         },
         {
           ownerId: 7,
@@ -82,8 +81,7 @@ module.exports = {
           gender: "female",
           size: "large",
           breed: "Siberian Husky",
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Pellentesque massa placerat duis ultricies lacus sed.",
+          description: "Yes. Okay, already. I'm a dog. I really am.",
         },
         {
           ownerId: 8,
@@ -93,7 +91,7 @@ module.exports = {
           size: "small",
           breed: "French Bulldog",
           description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Pellentesque massa placerat duis ultricies lacus sed.",
+            "I prefer the comfort of home where I can sit. Dog parks and hikes are too chaotic for me. I like my house.",
         },
       ],
       {}

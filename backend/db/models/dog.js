@@ -28,7 +28,10 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
         hooks: true,
       });
-      Dog.belongsToMany(models.Tag, { through: models.DogTag });
+      Dog.belongsToMany(models.Tag, {
+        through: models.DogTag,
+        foreignKey: "dogId",
+      });
     }
   }
   Dog.init(
