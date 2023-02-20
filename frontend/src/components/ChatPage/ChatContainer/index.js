@@ -94,6 +94,7 @@ const ChatContainer = ({
             value={message}
             onChange={handleOnChange}
             onKeyUp={handleKeyUp}
+            maxLength={100}
           />
           <button
             onClick={handleSendMessage}

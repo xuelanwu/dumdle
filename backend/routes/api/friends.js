@@ -140,6 +140,7 @@ router.get("/new", requireAuth, async (req, res) => {
         {
           model: DogImage,
         },
+        { model: Tag },
       ],
     });
     if (newFriend) {

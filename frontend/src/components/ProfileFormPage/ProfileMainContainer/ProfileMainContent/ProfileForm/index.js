@@ -525,7 +525,7 @@ const ProfileForm = () => {
 
       <div className="profile-form-block">
         <label className="profile-label">
-          <span>Passions or Personality</span>
+          <span>{`Passions or Personality (optional)`}</span>
         </label>
         <div className="profile-input tag-container">
           {tags.map((tag, idx) => (

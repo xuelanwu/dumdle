@@ -10,7 +10,7 @@
 }
 
 .message-container {
-  height: calc(100vh - 4.5rem - 4rem);
+  height: calc(100vh - 4.5rem - 5rem);
 }
 
 .scroll-wrapper {
@@ -43,8 +43,8 @@
 }
 
 .input-container {
-  height: 4rem;
-  padding: 0.5rem 1.25rem;
+  height: 5rem;
+  padding: 1rem 1.25rem;
 }
 
 .input-block {
