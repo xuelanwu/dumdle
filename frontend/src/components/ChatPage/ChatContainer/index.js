@@ -48,6 +48,14 @@ const ChatContainer = ({
     history.push("/home");
   };
 
+  const handleKeyUp = (e) => {
+    e.preventDefault();
+    if (e.key === "Enter") {
+      handleSendMessage();
+    }
+    return;
+  };
+
   return (
     <div className="main-container chat">
       <div className="main-title-container chat">
@@ -81,7 +89,12 @@ const ChatContainer = ({
       </div>
       <div className="input-container">
         <div className="input-block">
-          <input type="text" value={message} onChange={handleOnChange} />
+          <input
+            type="text"
+            value={message}
+            onChange={handleOnChange}
+            onKeyUp={handleKeyUp}
+          />
           <button
             onClick={handleSendMessage}
             className={`send-button ${

@@ -130,8 +130,8 @@ const HomeMainContent = () => {
                     {newDog.description}
                   </p>
                   <div className="home-content-tag-block">
-                    {console.log("********* home tags", newDog.Tags)}
-                    {newDog.Tags.length > 0 &&
+                    {newDog.Tags &&
+                      newDog.Tags.length > 0 &&
                       newDog.Tags.map((tag, i) => (
                         <div
                           className="home-content-tag-box"
