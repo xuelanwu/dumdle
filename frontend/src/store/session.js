@@ -1,6 +1,7 @@
 import { csrfFetch } from "./csrf";
 import { storage } from "../firebase";
 import { ref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
+import { async } from "@firebase/util";
 
 const SET_USER = "session/setUser";
 const REMOVE_USER = "session/removeUser";
@@ -152,6 +153,31 @@ export const addImages = (dogId, imgArr) => async (dispatch) => {
     body: JSON.stringify({ dogId, urls }),
   });
 
+  if (response.ok) {
+    dispatch(getProfile(dogId));
+    return dogId;
+  }
+  return response;
+};
+
+export const addTags = (dogId, tags) => async (dispatch) => {
+  const response = await csrfFetch(`/api/dogs/tags`, {
+    method: "POST",
+    body: JSON.stringify({ dogId, tags }),
+  });
+  if (response.ok) {
+    const data = await response.json();
+    dispatch(getProfile(dogId));
+    return data;
+  }
+  return response;
+};
+
+export const removeTags = (dogId, tags) => async (dispatch) => {
+  const response = await csrfFetch(`/api/dogs/tags`, {
+    method: "PUT",
+    body: JSON.stringify({ dogId, tags }),
+  });
   if (response.ok) {
     const data = await response.json();
     dispatch(getProfile(dogId));

@@ -44,7 +44,7 @@ const ChatContainer = ({
   //   setUsername("");
   // };
   const handleClose = (e) => {
-    e.prevent.default();
+    e.preventDefault();
     history.push("/home");
   };
 

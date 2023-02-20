@@ -1,7 +1,7 @@
 const express = require("express");
 
 const { requireAuth } = require("../../utils/auth");
-const { Friend, Dog, DogImage } = require("../../db/models");
+const { Friend, Dog, DogImage, Tag } = require("../../db/models");
 
 const { Op } = require("sequelize");
 
@@ -98,6 +98,7 @@ router.get("/new", requireAuth, async (req, res) => {
         },
       },
       { model: DogImage },
+      { model: Tag },
     ],
   });
 
