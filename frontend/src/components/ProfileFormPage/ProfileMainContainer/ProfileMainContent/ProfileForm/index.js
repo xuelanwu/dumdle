@@ -212,7 +212,6 @@ const ProfileForm = () => {
     setTags([...tags, newTag]);
     setNewTags([...newTags, newTag]);
     setRemovedTags(removedTags.filter((ele) => ele !== newTag));
-    console.log("********* e", e.target.value);
     e.target.value = null;
   };
 
@@ -534,6 +533,7 @@ const ProfileForm = () => {
             placeholder="Add a tag"
             className="profile-tag-input"
             onKeyDown={handleEnter}
+            maxLength={25}
           />
         </div>
       </div>

@@ -25,6 +25,10 @@
   padding-bottom: 0.8rem;
 }
 
+.message-block:first-of-type {
+  padding-top: 1rem;
+}
+
 .message-block.sent {
   justify-content: flex-end;
 }
